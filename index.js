@@ -43,17 +43,16 @@ const defaultOptions = {
   heading: chalk.yellow.bold,
   firstHeading: chalk.magenta.underline.bold,
   hr: chalk.reset,
-  listitem: chalk.reset,
-  list,
+  listitem: chalk.magenta,
   table: chalk.reset,
-  paragraph: chalk.reset,
   strong: chalk.bold,
   em: chalk.italic,
   codespan: chalk.yellow,
   del: chalk.dim.gray.strikethrough,
   link: chalk.blue,
   href: chalk.blue.underline,
-  text: identity,
+  paragraph: chalk.white,
+  text: chalk.white,
   unescape: true,
   emoji: true,
   width: 80,
@@ -139,7 +138,7 @@ class Renderer {
    */
   list(body, ordered) {
     body = `${indentLines(this.tab, body)}`;
-    return section(list(body, ordered, this.tab))
+    return section(list(body, ordered, this.tab));
     return section(fixNestedLists(indentLines(this.tab, body), this.tab));
   }
 
@@ -149,11 +148,11 @@ class Renderer {
    */
   listitem(text) {
     // return '+' + text+'-\n'
-    const transform = compose(this.o.listitem, this.transform);
+    const transform = compose(this.transform);
     const isNested = text.includes('\n');
     if (isNested) { text = text.trim(); }
     // Use BULLET_POINT as a marker for ordered or unordered list item
-    return `\n${BULLET_POINT}${transform(text)}`;
+    return `\n${this.o.listitem(BULLET_POINT)}${transform(text)}`;
   }
 
   /**
