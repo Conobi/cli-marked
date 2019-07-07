@@ -1,6 +1,10 @@
 # mversion [ <newversion> | major | minor | patch | prerelease ] [ -m <optional message> ] [ -n | --no-prefix ]
 > Update module version in either one or all of package.json,
-component.json, bower.json, manifest.json and *.jquery.json.
+> component.json, bower.json, manifest.json and *.jquery.json.
+>
+>> Sub quote
+>
+> Other text
 
 **Run without arguments to get current version.**
 

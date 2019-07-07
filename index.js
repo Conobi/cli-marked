@@ -303,16 +303,6 @@ class Renderer {
     if (title) { out += ` – ${title}`; }
     return `${out}]\n`;
   }
-
-  /**
-   * Compute length of str not including ANSI escape codes.
-   * See http://en.wikipedia.org/wiki/ANSI_escape_code#graphics.
-   *
-   * @param {*} string
-   */
-  textLength(string) {
-    return string.replace(/\u001B\[(?:\d{1,3})(?:;\d{1,3})*m/g, '').length;
-  }
 }
 
 
