@@ -24,7 +24,6 @@ const {
   indentLines,
   generateTableRow,
   hr,
-  fixNestedLists,
 } = require('./lib/functions');
 
 
@@ -64,11 +63,11 @@ const defaultOptions = {
 
 class Renderer {
   constructor(options, highlightOptions) {
-    this.o = ({ ...defaultOptions, ...options });
-    this.tab = sanitizeTab(this.o.tab, defaultOptions.tab);
-    this.tableSettings = this.o.tableOptions;
-    this.emoji = this.o.emoji ? insertEmojis : identity;
-    this.unescape = this.o.unescape ? unescapeEntities : identity;
+    this.options = ({ ...defaultOptions, ...options });
+    this.tab = sanitizeTab(this.options.tab, defaultOptions.tab);
+    this.tableSettings = this.options.tableOptions;
+    this.emoji = this.options.emoji ? insertEmojis : identity;
+    this.unescape = this.options.unescape ? unescapeEntities : identity;
     this.highlightOptions = highlightOptions || {};
     this.transform = compose(undoColon, this.unescape, this.emoji);
   }
@@ -78,7 +77,7 @@ class Renderer {
    * @param {*} text
    */
   text(text) {
-    return this.o.text(text);
+    return this.options.text(text);
   }
 
   /**
@@ -88,7 +87,7 @@ class Renderer {
    * @param {*} escaped
    */
   code(code, lang, escaped) {
-    return section(indentify(this.tab, highlight(code, lang, this.o, this.highlightOptions)));
+    return section(indentify(this.tab, highlight(code, lang, this.options, this.highlightOptions)));
   }
 
   /**
@@ -96,7 +95,7 @@ class Renderer {
    * @param {*} quote
    */
   blockquote(quote) {
-    return section(indentify(this.o.blockquote('│ '), quote.trim()));
+    return section(indentify(this.options.blockquote('│ '), quote.trim()));
   }
 
   /**
@@ -104,7 +103,7 @@ class Renderer {
    * @param {*} html
    */
   html(html) {
-    return this.o.html(html);
+    return this.options.html(html);
   }
 
   /**
@@ -115,20 +114,20 @@ class Renderer {
    */
   heading(text, level, raw) {
     text = this.transform(text);
-    const prefix = this.o.showSectionPrefix
+    const prefix = this.options.showSectionPrefix
       ? `${(new Array(level + 1)).join('#')} ` : '';
     text = prefix + text;
-    if (this.o.reflowText) {
-      text = reflowText(text, this.o.width, this.options.gfm);
+    if (this.options.reflowText) {
+      text = reflowText(text, this.options.width, this.options.gfm);
     }
-    return section(level === 1 ? this.o.firstHeading(text) : this.o.heading(text));
+    return section(level === 1 ? this.options.firstHeading(text) : this.options.heading(text));
   }
 
   /**
    *
    */
   hr() {
-    return section(this.o.hr(hr('-', this.o.reflowText && this.o.width)));
+    return section(this.options.hr(hr('-', this.options.reflowText && this.options.width)));
   }
 
   /**
@@ -139,7 +138,6 @@ class Renderer {
   list(body, ordered) {
     body = `${indentLines(this.tab, body)}`;
     return section(list(body, ordered, this.tab));
-    return section(fixNestedLists(indentLines(this.tab, body), this.tab));
   }
 
   /**
@@ -152,7 +150,7 @@ class Renderer {
     const isNested = text.includes('\n');
     if (isNested) { text = text.trim(); }
     // Use BULLET_POINT as a marker for ordered or unordered list item
-    return `\n${this.o.listitem(BULLET_POINT)}${transform(text)}`;
+    return `\n${this.options.listitem(BULLET_POINT)}${transform(text)}`;
   }
 
   /**
@@ -167,10 +165,10 @@ class Renderer {
    * @param {*} text
    */
   paragraph(text) {
-    const transform = compose(this.o.paragraph, this.transform);
+    const transform = compose(this.options.paragraph, this.transform);
     text = transform(text);
-    if (this.o.reflowText) {
-      text = reflowText(text, this.o.width, this.options.gfm);
+    if (this.options.reflowText) {
+      text = reflowText(text, this.options.width, this.options.gfm);
     }
     return section(text);
   }
@@ -190,7 +188,7 @@ class Renderer {
     generateTableRow(body, this.transform).forEach((row) => {
       table.push(row);
     });
-    return section(this.o.table(table.toString()));
+    return section(this.options.table(table.toString()));
   }
 
   /**
@@ -216,7 +214,7 @@ class Renderer {
    * @param {*} text
    */
   strong(text) {
-    return this.o.strong(text);
+    return this.options.strong(text);
   }
 
   /**
@@ -224,8 +222,8 @@ class Renderer {
    * @param {*} text
    */
   em(text) {
-    text = fixHardReturn(text, this.o.reflowText);
-    return this.o.em(text);
+    text = fixHardReturn(text, this.options.reflowText);
+    return this.options.em(text);
   }
 
   /**
@@ -233,15 +231,15 @@ class Renderer {
    * @param {*} text
    */
   codespan(text) {
-    text = fixHardReturn(text, this.o.reflowText);
-    return this.o.codespan(text.replace(/:/g, COLON_REPLACER));
+    text = fixHardReturn(text, this.options.reflowText);
+    return this.options.codespan(text.replace(/:/g, COLON_REPLACER));
   }
 
   /**
    *
    */
   br() {
-    return this.o.reflowText ? HARD_RETURN : '\n';
+    return this.options.reflowText ? HARD_RETURN : '\n';
   }
 
   /**
@@ -249,7 +247,7 @@ class Renderer {
    * @param {*} text
    */
   del(text) {
-    return this.o.del(text);
+    return this.options.del(text);
   }
 
   /**
@@ -278,17 +276,17 @@ class Renderer {
     if (supportsHyperlinks.stdout) {
       let link = '';
       if (text) {
-        link = this.o.href(this.emoji(text));
+        link = this.options.href(this.emoji(text));
       } else {
-        link = this.o.href(href);
+        link = this.options.href(href);
       }
       out = ansiEscapes.link(link, href);
     } else {
       if (hasText) { out += `${this.emoji(text)} (`; }
-      out += this.o.href(href);
+      out += this.options.href(href);
       if (hasText) { out += ')'; }
     }
-    return this.o.link(out);
+    return this.options.link(out);
   }
 
   /**
