@@ -38,9 +38,9 @@ const {
 
 const defaultOptions = {
   code: chalk.yellow,
-  blockquote: chalk.gray.italic,
+  blockquote: chalk.gray,
   html: chalk.gray,
-  heading: chalk.green.bold,
+  heading: chalk.yellow.bold,
   firstHeading: chalk.magenta.underline.bold,
   hr: chalk.reset,
   listitem: chalk.reset,
@@ -59,7 +59,7 @@ const defaultOptions = {
   width: 80,
   showSectionPrefix: true,
   reflowText: false,
-  tab: 4,
+  tab: 2,
   tableOptions: {},
 };
 
@@ -79,7 +79,7 @@ class Renderer {
    * @param {*} text
    */
   text(text) {
-    return this.o.text(text.replace('\n', ' '));
+    return this.o.text(text);
   }
 
   /**
@@ -97,7 +97,7 @@ class Renderer {
    * @param {*} quote
    */
   blockquote(quote) {
-    return section(this.o.blockquote(indentify(this.tab, quote.trim())));
+    return section(indentify(this.o.blockquote('│ '), quote.trim()));
   }
 
   /**
@@ -138,7 +138,8 @@ class Renderer {
    * @param {*} ordered
    */
   list(body, ordered) {
-    body = this.o.list(body, ordered, this.tab);
+    body = `${indentLines(this.tab, body)}`;
+    return section(list(body, ordered, this.tab))
     return section(fixNestedLists(indentLines(this.tab, body), this.tab));
   }
 
@@ -147,6 +148,7 @@ class Renderer {
    * @param {*} text
    */
   listitem(text) {
+    // return '+' + text+'-\n'
     const transform = compose(this.o.listitem, this.transform);
     const isNested = text.includes('\n');
     if (isNested) { text = text.trim(); }
