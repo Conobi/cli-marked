@@ -2,11 +2,10 @@
 /* eslint-disable jsdoc/require-example */
 /* eslint-disable jsdoc/require-returns */
 /** @typedef {import('chalk')} chalk  */
-const chalk = require('chalk');
 const Table = require('cli-table');
 const ansiEscapes = require('ansi-escapes');
+const ansiStyles = require('ansi-colors');
 const supportsHyperlinks = require('supports-hyperlinks');
-
 
 const {
   list,
@@ -22,7 +21,7 @@ const {
   indentLines,
   generateTableRow,
   hr,
-  header
+  header,
 } = require('./lib/functions');
 
 
@@ -33,48 +32,48 @@ const {
   BULLET_POINT,
   BULLET_DONE,
   BULLET_UNDONE,
-  HEADER_SYMBOL
+  HEADER_SYMBOL,
 } = require('./lib/constants');
 
 const defaultOptions = {
-  code: chalk.yellow,
-  blockquote: chalk.gray.italic,
-  blockquoteText: chalk.reset.dim.italic,
-  html: chalk.gray,
-  firstHeading: chalk.magenta.underline.bold,
-  heading: chalk.green.underline.bold,
-  headers:[
-    chalk.red.underline.bold,
-    chalk.yellow.underline.bold     ,
-    chalk.yellow.underline.bold,
-    chalk.green.underline,
-    chalk.green,
-    chalk.green.dim,
+  code: string => ansiStyles.yellow(string),
+  blockquote: string => ansiStyles.gray.italic(string),
+  blockquoteText: string => ansiStyles.dim.italic(string),
+  html: string => ansiStyles.gray(string),
+  headers: [
+    string => ansiStyles.red.underline.bold(string),
+    string => ansiStyles.yellow.underline.bold(string),
+    string => ansiStyles.yellow.underline.bold(string),
+    string => ansiStyles.green.underline(string),
+    string => ansiStyles.green(string),
+    string => ansiStyles.green.dim(string),
   ],
-  hr: chalk.dim,
-  listitem: chalk.magenta,
-  table: chalk.reset,
-  strong: chalk.red.bold,
-  em: chalk.red.italic,
-  codespan: chalk.yellow,
-  del: chalk.dim.reset.strikethrough,
-  link: chalk.blue,
-  href: chalk.blue.underline,
-  doneMark: chalk.green.bold,
-  undoneMark: chalk.red.bold,
+  hr: string => ansiStyles.dim(string),
+  listitem: string => ansiStyles.magenta(string),
+  table: string => ansiStyles.reset(string),
+  strong: string => ansiStyles.red.bold(string),
+  em: string => ansiStyles.green(string),
+  codespan: string => ansiStyles.yellow(string),
+  del: string => ansiStyles.dim.reset.strikethrough(string),
+  link: string => ansiStyles.blue(string),
+  href: string => ansiStyles.blue.underline(string),
+  doneMark: string => ansiStyles.green.bold(string),
+  undoneMark: string => ansiStyles.red.bold(string),
   paragraph: identity,
   text: identity,
   unescape: true,
   emoji: true,
   breaks: true,
-  tab: 2,
+  indent: '  ',
+  smallIndent: ' ',
   tableOptions: {},
 };
 
 class Renderer {
   constructor(options, highlightOptions) {
     this.o = { ...defaultOptions, ...options };
-    this.tab = sanitizeTab(this.o.tab, defaultOptions.tab);
+    this.indent = sanitizeTab(this.o.indent, defaultOptions.indent);
+    this.smallIndent = sanitizeTab(this.o.smallIndent, defaultOptions.smallIndent);
     this.tableSettings = this.o.tableOptions;
     this.emoji = this.o.emoji ? insertEmojis : identity;
     this.unescape = this.o.unescape ? unescapeEntities : identity;
@@ -97,7 +96,24 @@ class Renderer {
    * @param {*} escaped
    */
   code(code, lang, escaped) {
-    return section(indentify(this.tab, highlight(code, lang, this.o, this.highlightOptions)));
+    return section(indentify(this.o.smallIndent, highlight(code, lang, this.o, this.highlightOptions)));
+  }
+
+  /**
+   *
+   * @param {*} text
+   */
+  codespan(text) {
+    return this.o.codespan(`\`${text.replace(/:/g, COLON_REPLACER)}\``);
+  }
+
+  /**
+   * FIXME: I'm not sure that this works i all cases.
+   *
+   * @param {*} html
+   */
+  html(html) {
+    return this.o.html(html);
   }
 
   /**
@@ -111,13 +127,6 @@ class Renderer {
     ));
   }
 
-  /**
-   *
-   * @param {*} html
-   */
-  html(html) {
-    return this.o.html(html);
-  }
 
   /**
    *
@@ -128,8 +137,8 @@ class Renderer {
   heading(text, level, raw) {
     text = this.transform(text);
     const prefix = `${HEADER_SYMBOL} `;
-    text = prefix + text
-    return section(header(text,level,this.o.headers[level-1]));
+    text = prefix + text;
+    return section(header(text, level, this.o.headers[level - 1]));
   }
 
   /**
@@ -146,8 +155,8 @@ class Renderer {
    */
   list(body, ordered) {
     // return `>${section(body)}>`;
-    body = `${indentLines(this.tab, body)}`;
-    return section(list(body, ordered, this.tab));
+    body = `${indentLines(this.indent, body)}`;
+    return section(list(body, ordered, this.indent));
   }
 
   /**
@@ -237,13 +246,6 @@ class Renderer {
     return this.o.em(text);
   }
 
-  /**
-   *
-   * @param {*} text
-   */
-  codespan(text) {
-    return this.o.codespan(text.replace(/:/g, COLON_REPLACER));
-  }
 
   /**
    *
