@@ -22,6 +22,7 @@ const {
   indentLines,
   generateTableRow,
   hr,
+  header
 } = require('./lib/functions');
 
 
@@ -29,10 +30,10 @@ const {
   TABLE_CELL_SPLIT,
   TABLE_ROW_WRAP,
   COLON_REPLACER,
-  HARD_RETURN,
   BULLET_POINT,
   BULLET_DONE,
   BULLET_UNDONE,
+  HEADER_SYMBOL
 } = require('./lib/constants');
 
 const defaultOptions = {
@@ -42,7 +43,15 @@ const defaultOptions = {
   html: chalk.gray,
   firstHeading: chalk.magenta.underline.bold,
   heading: chalk.green.underline.bold,
-  hr: chalk.reset,
+  headers:[
+    chalk.red.underline.bold,
+    chalk.yellow.underline.bold     ,
+    chalk.yellow.underline.bold,
+    chalk.green.underline,
+    chalk.green,
+    chalk.green.dim,
+  ],
+  hr: chalk.dim,
   listitem: chalk.magenta,
   table: chalk.reset,
   strong: chalk.red.bold,
@@ -58,7 +67,6 @@ const defaultOptions = {
   unescape: true,
   emoji: true,
   breaks: true,
-  showSectionPrefix: true,
   tab: 2,
   tableOptions: {},
 };
@@ -119,10 +127,9 @@ class Renderer {
    */
   heading(text, level, raw) {
     text = this.transform(text);
-    const prefix = this.o.showSectionPrefix
-      ? `${(new Array(level + 1)).join('#')} ` : '';
-    text = prefix + text;
-    return section(level === 1 ? this.o.firstHeading(text) : this.o.heading(text));
+    const prefix = `${HEADER_SYMBOL} `;
+    text = prefix + text
+    return section(header(text,level,this.o.headers[level-1]));
   }
 
   /**
