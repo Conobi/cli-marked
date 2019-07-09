@@ -1,6 +1,6 @@
-var marked = require('marked');
-var chalk = require('chalk');
-var TerminalRenderer = require('../');
+const marked = require('marked');
+const chalk = require('chalk');
+const TerminalRenderer = require('../');
 
 marked.setOptions({
   // Define custom renderer
@@ -10,10 +10,10 @@ marked.setOptions({
     codespan: chalk.underline.magenta,
 
     // Can also override color/styling by own functions.
-    firstHeading: function (text) {
-      return '*** ' + text;
-    }
-  })
+    firstHeading(text) {
+      return `*** ${text}`;
+    },
+  }),
 });
 
 // Show the parsed data
