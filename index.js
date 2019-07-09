@@ -17,9 +17,7 @@ const {
   undoColon,
   section,
   indentify,
-  fixHardReturn,
   highlight,
-  reflowText,
   sanitizeTab,
   indentLines,
   generateTableRow,
@@ -59,9 +57,8 @@ const defaultOptions = {
   text: identity,
   unescape: true,
   emoji: true,
-  width: 80,
+  breaks: true,
   showSectionPrefix: true,
-  reflowText: false,
   tab: 2,
   tableOptions: {},
 };
@@ -125,9 +122,6 @@ class Renderer {
     const prefix = this.o.showSectionPrefix
       ? `${(new Array(level + 1)).join('#')} ` : '';
     text = prefix + text;
-    if (this.o.reflowText) {
-      text = reflowText(text, this.o.width, this.o.gfm);
-    }
     return section(level === 1 ? this.o.firstHeading(text) : this.o.heading(text));
   }
 
@@ -135,7 +129,7 @@ class Renderer {
    *
    */
   hr() {
-    return section(this.o.hr(hr('─', this.o.reflowText && this.o.width)));
+    return section(this.o.hr(hr('─', this.o.width)));
   }
 
   /**
@@ -143,7 +137,7 @@ class Renderer {
    * @param {*} body
    * @param {*} ordered
    */
-  list(body, ordered, ...arguments_) {
+  list(body, ordered ) {
     // return `>${section(body)}>`;
     body = `${indentLines(this.tab, body)}`;
     return section(list(body, ordered, this.tab));
@@ -153,7 +147,7 @@ class Renderer {
    *
    * @param {*} text
    */
-  listitem(text, checkboxes, ...argument) {
+  listitem(text, checkboxes) {
     // console.log('++++---', argument);
     const transform = compose(this.transform);
     const isNested = text.includes('\n');
@@ -181,9 +175,6 @@ class Renderer {
   paragraph(text) {
     const transform = compose(this.o.paragraph, this.transform);
     text = transform(text);
-    if (this.o.reflowText) {
-      text = reflowText(text, this.o.width, this.o.gfm);
-    }
     return section(text);
   }
 
@@ -236,7 +227,6 @@ class Renderer {
    * @param {*} text
    */
   em(text) {
-    text = fixHardReturn(text, this.o.reflowText);
     return this.o.em(text);
   }
 
@@ -245,7 +235,6 @@ class Renderer {
    * @param {*} text
    */
   codespan(text) {
-    text = fixHardReturn(text, this.o.reflowText);
     return this.o.codespan(text.replace(/:/g, COLON_REPLACER));
   }
 
@@ -253,7 +242,7 @@ class Renderer {
    *
    */
   br() {
-    return this.o.reflowText ? HARD_RETURN : '\n';
+    return '\n';
   }
 
   /**
