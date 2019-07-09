@@ -1,104 +1,106 @@
 
-var assert = require('assert');
-var Renderer = require('../');
-var marked = require('marked');
+const assert = require('assert');
+const marked = require('marked');
+const Renderer = require('../');
 
+function stripTermEsc(string) {
+  return string.replace(/\u001B\[\d{1,2}m/g, '');
+}
 
-var identity = function (o) {
+const identity = function (o) {
   return o;
 };
 
-var opts = [
+const options = [
   'code', 'blockquote', 'html', 'heading',
   'firstHeading', 'hr', 'listitem', 'table',
   'paragraph', 'strong', 'em', 'codespan',
-  'del', 'link', 'href'
+  'del', 'link', 'href',
 ];
 
-var defaultOptions = {};
-opts.forEach(function (opt) {
+const defaultOptions = {};
+options.forEach((opt) => {
   defaultOptions[opt] = identity;
 });
 
 defaultOptions.emoji = false;
 
-describe('Options', function () {
-  var r = new Renderer(defaultOptions);
+describe('Options', () => {
+  const r = new Renderer(defaultOptions);
 
-  it('should not translate emojis', function () {
-    var markdownText = 'Some :emoji:';
+  it('should not translate emojis', () => {
+    const markdownText = 'Some :emoji:';
 
     assert.notEqual(marked(markdownText, {
-      renderer: r
+      renderer: r,
     }).indexOf(':emoji:'), -1);
   });
 
-  it('should change tabs by space size', function () {
-    var options = Object.assign({}, defaultOptions, { tab: 4 });
-    var r = new Renderer(options);
+  it('should change tabs by space size', () => {
+    const options = ({ ...defaultOptions, ...{ tab: 4 } });
+    const r = new Renderer(options);
 
-    var blockquoteText = '> Blockquote'
+    const blockquoteText = '> Blockquote';
     assert.equal(
-      marked(blockquoteText, { renderer: r }),
-      '    Blockquote\n\n'
+      stripTermEsc(marked(blockquoteText, { renderer: r })),
+      '\n│ Blockquote\n',
     );
 
-    var listText = '* List Item'
+    const listText = '* List Item';
     assert.equal(
       marked(listText, { renderer: r }),
-      '    * List Item\n\n'
+      '\n    • List Item\n',
     );
   });
 
-  it('should use default tabs if passing not supported string', function () {
-    var options = Object.assign({}, defaultOptions, { tab: 'dsakdskajhdsa' });
-    var r = new Renderer(options);
+  it('should use default tabs if passing not supported string', () => {
+    const options = ({ ...defaultOptions, ...{ tab: 'dsakdskajhdsa' } });
+    const r = new Renderer(options);
 
-    var blockquoteText = '> Blockquote'
+    const blockquoteText = '> Blockquote';
     assert.equal(
-      marked(blockquoteText, { renderer: r }),
-      '    Blockquote\n\n'
+      stripTermEsc(marked(blockquoteText, { renderer: r })),
+      '\n│ Blockquote\n',
     );
 
-    var listText = '* List Item'
+    const listText = '* List Item';
     assert.equal(
       marked(listText, { renderer: r }),
-      '    * List Item\n\n'
+      '\n  • List Item\n',
     );
   });
 
-  it('should change tabs by allowed characters', function () {
-    var options = Object.assign({}, defaultOptions, { tab: '\t' });
-    var r = new Renderer(options);
+  it('should change tabs by allowed characters', () => {
+    const options = ({ ...defaultOptions, ...{ tab: '\t' } });
+    const r = new Renderer(options);
 
-    var blockquoteText = '> Blockquote'
+    const blockquoteText = '> Blockquote';
     assert.equal(
-      marked(blockquoteText, { renderer: r }),
-      '\tBlockquote\n\n'
+      stripTermEsc(marked(blockquoteText, { renderer: r })),
+      '\n│ Blockquote\n',
     );
 
-    var listText = '* List Item'
+    const listText = '* List Item';
     assert.equal(
       marked(listText, { renderer: r }),
-      '\t* List Item\n\n'
+      '\n\t• List Item\n',
     );
   });
 
-  it('should support mulitple tab characters', function () {
-    var options = Object.assign({}, defaultOptions, { tab: '\t\t' });
-    var r = new Renderer(options);
+  it('should support mulitple tab characters', () => {
+    const options = ({ ...defaultOptions, ...{ tab: '\t\t' } });
+    const r = new Renderer(options);
 
-    var blockquoteText = '> Blockquote'
+    const blockquoteText = '> Blockquote';
     assert.equal(
-      marked(blockquoteText, { renderer: r }),
-      '\t\tBlockquote\n\n'
+      stripTermEsc(marked(blockquoteText, { renderer: r })),
+      '\n│ Blockquote\n',
     );
 
-    var listText = '* List Item'
+    const listText = '* List Item';
     assert.equal(
-      marked(listText, { renderer: r }),
-      '\t\t* List Item\n\n'
+      stripTermEsc(marked(listText, { renderer: r })),
+      '\n\t\t• List Item\n',
     );
   });
-
 });

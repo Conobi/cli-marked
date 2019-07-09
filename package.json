@@ -33,25 +33,26 @@
     "concat-stream": "^2.0.0",
     "hr": "^0.1.3",
     "node-emoji": "^1.10.0",
+    "strip-ansi": "^5.2.0",
     "supports-hyperlinks": "^1.0.1"
   },
   "directories": {
     "example": "example"
   },
   "devDependencies": {
-    "marked": "^0.7.0",
-    "mocha": "^6.1.4",
     "eslint": "^6.0.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-standard-jsdoc": "^8.1.8",
+    "eslint-config-standard-jsdoc": "^9.0.0",
     "eslint-plugin-async-await": "0.0.0",
     "eslint-plugin-import": "^2.17.3",
-    "eslint-plugin-jsdoc": "^8.6.0",
+    "eslint-plugin-jsdoc": "^15.3.2",
     "eslint-plugin-no-loops": "^0.3.0",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-security": "^1.4.0",
-    "eslint-plugin-unicorn": "^9.1.1"
+    "eslint-plugin-unicorn": "^9.1.1",
+    "marked": "^0.7.0",
+    "mocha": "^6.1.4"
   },
   "repository": {
     "type": "git",

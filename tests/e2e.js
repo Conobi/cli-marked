@@ -1,49 +1,47 @@
 
-var assert = require('assert');
-var fs = require('fs');
-var path = require('path');
-var Renderer = require('../');
-var marked = require('marked');
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const marked = require('marked');
+const Renderer = require('../');
 
 
-var identity = function (o) {
+const identity = function (o) {
   return o;
 };
 
-function stripTermEsc (str) {
-  return str.replace(/\u001b\[\d{1,2}m/g, "");
+function stripTermEsc(string) {
+  return string.replace(/\u001B\[\d{1,2}m/g, '');
 }
 
-function getFixtureFile (fileName) {
+function getFixtureFile(fileName) {
   return fs.readFileSync(
     path.resolve(__dirname, 'fixtures/', fileName),
-    { encoding: 'utf8' }
+    { encoding: 'utf8' },
   );
 }
 
-var opts = [
+const options = [
   'code', 'blockquote', 'html', 'heading',
   'firstHeading', 'hr', 'listitem', 'table',
   'paragraph', 'strong', 'em', 'codespan',
-  'del', 'link', 'href'
+  'del', 'link', 'href',
 ];
 
-var defaultOptions = {};
-opts.forEach(function (opt) {
+const defaultOptions = {};
+options.forEach((opt) => {
   defaultOptions[opt] = identity;
 });
 
-function markup(str) {
-  var r = new Renderer(defaultOptions);
-  return stripTermEsc(marked(str, { renderer: r }));
+function markup(string) {
+  const r = new Renderer(defaultOptions);
+  return stripTermEsc(marked(string, { renderer: r }));
 }
 
-describe('e2', function () {
-
-  it('should render a document full of different supported syntax', function () {
+describe('e2', () => {
+  it('should render a document full of different supported syntax', () => {
     const actual = markup(getFixtureFile('e2e.md'));
     const expected = getFixtureFile('e2e.result.txt');
     assert.equal(actual, expected);
   });
-
 });

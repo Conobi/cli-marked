@@ -33,25 +33,30 @@ const {
   COLON_REPLACER,
   HARD_RETURN,
   BULLET_POINT,
+  BULLET_DONE,
+  BULLET_UNDONE,
 } = require('./lib/constants');
 
 const defaultOptions = {
   code: chalk.yellow,
-  blockquote: chalk.gray,
+  blockquote: chalk.gray.italic,
+  blockquoteText: chalk.reset.dim.italic,
   html: chalk.gray,
-  heading: chalk.yellow.bold,
   firstHeading: chalk.magenta.underline.bold,
+  heading: chalk.green.underline.bold,
   hr: chalk.reset,
   listitem: chalk.magenta,
   table: chalk.reset,
-  strong: chalk.bold,
-  em: chalk.italic,
+  strong: chalk.red.bold,
+  em: chalk.red.italic,
   codespan: chalk.yellow,
-  del: chalk.dim.gray.strikethrough,
+  del: chalk.dim.reset.strikethrough,
   link: chalk.blue,
   href: chalk.blue.underline,
-  paragraph: chalk.white,
-  text: chalk.white,
+  doneMark: chalk.green.bold,
+  undoneMark: chalk.red.bold,
+  paragraph: identity,
+  text: identity,
   unescape: true,
   emoji: true,
   width: 80,
@@ -63,11 +68,11 @@ const defaultOptions = {
 
 class Renderer {
   constructor(options, highlightOptions) {
-    this.options = ({ ...defaultOptions, ...options });
-    this.tab = sanitizeTab(this.options.tab, defaultOptions.tab);
-    this.tableSettings = this.options.tableOptions;
-    this.emoji = this.options.emoji ? insertEmojis : identity;
-    this.unescape = this.options.unescape ? unescapeEntities : identity;
+    this.o = { ...defaultOptions, ...options };
+    this.tab = sanitizeTab(this.o.tab, defaultOptions.tab);
+    this.tableSettings = this.o.tableOptions;
+    this.emoji = this.o.emoji ? insertEmojis : identity;
+    this.unescape = this.o.unescape ? unescapeEntities : identity;
     this.highlightOptions = highlightOptions || {};
     this.transform = compose(undoColon, this.unescape, this.emoji);
   }
@@ -77,7 +82,7 @@ class Renderer {
    * @param {*} text
    */
   text(text) {
-    return this.options.text(text);
+    return this.o.text(text);
   }
 
   /**
@@ -87,7 +92,7 @@ class Renderer {
    * @param {*} escaped
    */
   code(code, lang, escaped) {
-    return section(indentify(this.tab, highlight(code, lang, this.options, this.highlightOptions)));
+    return section(indentify(this.tab, highlight(code, lang, this.o, this.highlightOptions)));
   }
 
   /**
@@ -95,7 +100,10 @@ class Renderer {
    * @param {*} quote
    */
   blockquote(quote) {
-    return section(indentify(this.options.blockquote('│ '), quote.trim()));
+    return section(indentify(
+      this.o.blockquote('│ '),
+      this.o.blockquoteText(quote.trim()),
+    ));
   }
 
   /**
@@ -103,7 +111,7 @@ class Renderer {
    * @param {*} html
    */
   html(html) {
-    return this.options.html(html);
+    return this.o.html(html);
   }
 
   /**
@@ -114,20 +122,20 @@ class Renderer {
    */
   heading(text, level, raw) {
     text = this.transform(text);
-    const prefix = this.options.showSectionPrefix
+    const prefix = this.o.showSectionPrefix
       ? `${(new Array(level + 1)).join('#')} ` : '';
     text = prefix + text;
-    if (this.options.reflowText) {
-      text = reflowText(text, this.options.width, this.options.gfm);
+    if (this.o.reflowText) {
+      text = reflowText(text, this.o.width, this.o.gfm);
     }
-    return section(level === 1 ? this.options.firstHeading(text) : this.options.heading(text));
+    return section(level === 1 ? this.o.firstHeading(text) : this.o.heading(text));
   }
 
   /**
    *
    */
   hr() {
-    return section(this.options.hr(hr('-', this.options.reflowText && this.options.width)));
+    return section(this.o.hr(hr('─', this.o.reflowText && this.o.width)));
   }
 
   /**
@@ -135,7 +143,8 @@ class Renderer {
    * @param {*} body
    * @param {*} ordered
    */
-  list(body, ordered) {
+  list(body, ordered, ...arguments_) {
+    // return `>${section(body)}>`;
     body = `${indentLines(this.tab, body)}`;
     return section(list(body, ordered, this.tab));
   }
@@ -144,20 +153,25 @@ class Renderer {
    *
    * @param {*} text
    */
-  listitem(text) {
-    // return '+' + text+'-\n'
+  listitem(text, checkboxes, ...argument) {
+    // console.log('++++---', argument);
     const transform = compose(this.transform);
     const isNested = text.includes('\n');
     if (isNested) { text = text.trim(); }
+    if (checkboxes) {
+      return `\n${transform(text)}`;
+    }
     // Use BULLET_POINT as a marker for ordered or unordered list item
-    return `\n${this.options.listitem(BULLET_POINT)}${transform(text)}`;
+    return `\n${this.o.listitem(BULLET_POINT)}${transform(text)}`;
   }
 
   /**
    * @param {any} checked
    */
   checkbox(checked) {
-    return `[${checked ? 'X' : ' '}] `;
+    return `${checked
+      ? this.o.doneMark(BULLET_DONE)
+      : this.o.undoneMark(BULLET_UNDONE)} `;
   }
 
   /**
@@ -165,10 +179,10 @@ class Renderer {
    * @param {*} text
    */
   paragraph(text) {
-    const transform = compose(this.options.paragraph, this.transform);
+    const transform = compose(this.o.paragraph, this.transform);
     text = transform(text);
-    if (this.options.reflowText) {
-      text = reflowText(text, this.options.width, this.options.gfm);
+    if (this.o.reflowText) {
+      text = reflowText(text, this.o.width, this.o.gfm);
     }
     return section(text);
   }
@@ -188,7 +202,7 @@ class Renderer {
     generateTableRow(body, this.transform).forEach((row) => {
       table.push(row);
     });
-    return section(this.options.table(table.toString()));
+    return section(this.o.table(table.toString()));
   }
 
   /**
@@ -214,7 +228,7 @@ class Renderer {
    * @param {*} text
    */
   strong(text) {
-    return this.options.strong(text);
+    return this.o.strong(text);
   }
 
   /**
@@ -222,8 +236,8 @@ class Renderer {
    * @param {*} text
    */
   em(text) {
-    text = fixHardReturn(text, this.options.reflowText);
-    return this.options.em(text);
+    text = fixHardReturn(text, this.o.reflowText);
+    return this.o.em(text);
   }
 
   /**
@@ -231,15 +245,15 @@ class Renderer {
    * @param {*} text
    */
   codespan(text) {
-    text = fixHardReturn(text, this.options.reflowText);
-    return this.options.codespan(text.replace(/:/g, COLON_REPLACER));
+    text = fixHardReturn(text, this.o.reflowText);
+    return this.o.codespan(text.replace(/:/g, COLON_REPLACER));
   }
 
   /**
    *
    */
   br() {
-    return this.options.reflowText ? HARD_RETURN : '\n';
+    return this.o.reflowText ? HARD_RETURN : '\n';
   }
 
   /**
@@ -247,7 +261,7 @@ class Renderer {
    * @param {*} text
    */
   del(text) {
-    return this.options.del(text);
+    return this.o.del(text);
   }
 
   /**
@@ -258,7 +272,7 @@ class Renderer {
    */
   link(href, title, text) {
     let prot;
-    if (this.options.sanitize) {
+    if (this.o.sanitize) {
       try {
         prot = decodeURIComponent(unescape(href))
           .replace(/[^\w:]/g, '')
@@ -276,17 +290,19 @@ class Renderer {
     if (supportsHyperlinks.stdout) {
       let link = '';
       if (text) {
-        link = this.options.href(this.emoji(text));
+        link = this.emoji(text);
       } else {
-        link = this.options.href(href);
+        link = href;
       }
+      if (title) { link += ` – ${title}`; }
+      link = this.o.href(link);
       out = ansiEscapes.link(link, href);
     } else {
       if (hasText) { out += `${this.emoji(text)} (`; }
-      out += this.options.href(href);
+      out += this.o.href(href);
       if (hasText) { out += ')'; }
     }
-    return this.options.link(out);
+    return this.o.link(out);
   }
 
   /**
@@ -298,7 +314,7 @@ class Renderer {
   image(href, title, text) {
     let out = `![${text}`;
     if (title) { out += ` – ${title}`; }
-    return `${out}]\n`;
+    return `${out}]`;
   }
 }
 
