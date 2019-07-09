@@ -7,7 +7,8 @@
     "md": "./cli.js"
   },
   "scripts": {
-    "test": "FORCE_HYPERLINK=0 mocha tests/*.js --reporter spec"
+    "test": "FORCE_HYPERLINK=0 mocha tests/*.js --reporter spec",
+    "fix":"eslint --fix index.js cli.js lib/constants.js lib/functions.js tests/*js .eslintrc.js --ignore-pattern '!.eslintrc.js'"
   },
   "files": [
     "index.js"

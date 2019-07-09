@@ -137,7 +137,7 @@ class Renderer {
    * @param {*} body
    * @param {*} ordered
    */
-  list(body, ordered ) {
+  list(body, ordered) {
     // return `>${section(body)}>`;
     body = `${indentLines(this.tab, body)}`;
     return section(list(body, ordered, this.tab));

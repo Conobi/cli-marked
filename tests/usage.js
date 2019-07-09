@@ -123,7 +123,6 @@ describe('Renderer', () => {
   });
 
 
-
   it('should nuke section header', () => {
     text = '# Contents\n',
     expected = '\nContents\n';
