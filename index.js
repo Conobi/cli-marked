@@ -57,6 +57,7 @@ const defaultOptions = {
   del: string => ansiStyles.dim.reset.strikethrough(string),
   link: string => ansiStyles.blue(string),
   href: string => ansiStyles.blue.underline(string),
+  image: string => ansiStyles.cyan(string),
   doneMark: string => ansiStyles.green.bold(string),
   undoneMark: string => ansiStyles.red.bold(string),
   paragraph: identity,
@@ -312,7 +313,7 @@ class Renderer {
   image(href, title, text) {
     let out = `![${text}`;
     if (title) { out += ` – ${title}`; }
-    return `${out}]`;
+    return this.o.image(`${out}]`);
   }
 }
 
