@@ -1,20 +1,18 @@
 
-var assert = require('assert');
-var Renderer = require('../');
-var marked = require('marked');
+const assert = require('assert');
+const { textLength } = require('../lib/functions');
 
-describe('Terminal escape', function () {
-  var r = new Renderer();
 
-  it('should not be included in text length', function () {
-    var tokens = [
-      "\u001b[38;5;128mfoo\u001b[0m",
-      "\u001b[33mfoo\u001b[22m\u001b[24m\u001b[39m",
-      "\u001b[35m\u001b[4m\u001b[1mfoo",
-      "\u001b[33mfo\u001b[39mo\u001b[0m"
-    ]
-    tokens.forEach(function (token) {
-      assert.equal(r.textLength(token), 3)
+describe('Terminal escape', () => {
+  it('should not be included in text length', () => {
+    const tokens = [
+      '\u001B[38;5;128mfoo\u001B[0m',
+      '\u001B[33mfoo\u001B[22m\u001B[24m\u001B[39m',
+      '\u001B[35m\u001B[4m\u001B[1mfoo',
+      '\u001B[33mfo\u001B[39mo\u001B[0m',
+    ];
+    tokens.forEach((token) => {
+      assert.equal(textLength(token), 3);
     });
   });
 });

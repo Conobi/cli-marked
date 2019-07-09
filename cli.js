@@ -12,6 +12,10 @@ const c = {
 
 marked.setOptions({
   renderer: new TerminalRenderer(c),
+  gfm: true,
+  breaks: true,
+  mangle: false,
+  smartypants: true,
 });
 
 
@@ -23,5 +27,7 @@ const input = process.argv.length > 2
 process.argv.push('--color');
 
 input.pipe(concat((markdown) => {
-  process.stdout.write(marked(markdown.toString()));
+  process.stdout.write(marked(markdown.toString(), {
+    gfm: true,
+  }));
 }));
