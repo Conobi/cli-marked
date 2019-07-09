@@ -27,9 +27,7 @@ const defaultOptions2 = {};
 options.forEach((opt) => {
   defaultOptions[opt] = identity;
 });
-defaultOptions2.reflowText = true;
 defaultOptions2.showSectionPrefix = false;
-defaultOptions2.width = 10;
 
 
 defaultOptions.tableOptions = {
@@ -48,7 +46,7 @@ function markup(string, gfm = false) {
   var markedOptions = {
     renderer: r,
     gfm,
-    breaks: gfm,
+    breaks: true,
   };
   return stripTermEsc(marked(string, markedOptions));
 }
@@ -124,25 +122,7 @@ describe('Renderer', () => {
     assert.notEqual(marked(markdownText, markedOptions).indexOf('<CommandParam>'), -1);
   });
 
-  it('should reflow paragraph and split words that are too long (one break)', () => {
-    // eslint-disable-next-line prefer-const
-    let text = 'Now is the time: 01234567890\n';
-    // eslint-disable-next-line prefer-const
-    let expected = '\nNow is the\ntime: 0123\n4567890\n';
-    assert.equal(markup(text, true), expected);
-  });
 
-  it('should reflow paragraph and split words that are too long (two breaks)', () => {
-    text = 'Now is the time: http://timeanddate.com\n',
-    expected = '\nNow is the\ntime: http\n://timeand\ndate.com\n';
-    assert.equal(markup(text), expected);
-  });
-
-  it('should reflow paragraph', () => {
-    text = 'Now is the time\n',
-    expected = '\nNow is the\ntime\n';
-    assert.equal(markup(text), expected);
-  });
 
   it('should nuke section header', () => {
     text = '# Contents\n',
@@ -150,25 +130,6 @@ describe('Renderer', () => {
     assert.equal(markup(text), expected);
   });
 
-  it('should reflow and nuke section header', () => {
-    text = '# Now is the time\n',
-    expected = '\nNow is the\ntime\n';
-    assert.equal(markup(text), expected);
-  });
-
-  it('should preserve line breaks (non gfm)', () => {
-    text = 'Now  \nis    \nthe<br />time\n',
-    expected = '\nNow\nis\nthe<br\n/>time\n';
-    assert.equal(markup(text, false), expected);
-  });
-
-  it('should preserve line breaks (gfm)', () => {
-    // eslint-disable-next-line prefer-const
-    let text = 'Now  \nis    \nthe<br />time\n';
-    // eslint-disable-next-line prefer-const
-    let expected = '\nNow\nis\nthe<br\n/>time\n';
-    assert.equal(markup(text, true), expected);
-  });
 
   it('should render ordered and unordered list with same newlines', () => {
     const ul = '* ul item\n'

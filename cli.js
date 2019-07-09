@@ -11,7 +11,6 @@ const c = {
 marked.setOptions({
   renderer: new TerminalRenderer(c),
   gfm: true,
-  breaks: true,
   mangle: false,
   smartypants: true,
 });

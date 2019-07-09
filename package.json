@@ -40,6 +40,7 @@
     "example": "example"
   },
   "devDependencies": {
+    "@types/mocha": "^5.2.7",
     "eslint": "^6.0.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-standard-jsdoc": "^9.0.0",
