@@ -11,7 +11,7 @@ Could for instance be used to print usage information.
 ## Install
 
 ```sh
-npm install marked marked-terminal
+npm i -g marked-terminal
 ```
 
 ## Example
