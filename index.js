@@ -36,10 +36,18 @@ const {
 } = require('./lib/constants');
 
 const defaultOptions = {
+  // Base
+  paragraph: identity,
+  text: identity,
+  codespan: string => ansiStyles.yellow(string),
   code: string => ansiStyles.yellow(string),
+  html: string => ansiStyles.gray(string),
+  listitem: string => ansiStyles.magenta(string),
+
+  // Block
   blockquote: string => ansiStyles.gray.italic(string),
   blockquoteText: string => ansiStyles.dim.italic(string),
-  html: string => ansiStyles.gray(string),
+  table: string => ansiStyles.reset(string),
   headers: [
     string => ansiStyles.red.underline.bold(string),
     string => ansiStyles.yellow.underline.bold(string),
@@ -48,37 +56,33 @@ const defaultOptions = {
     string => ansiStyles.green(string),
     string => ansiStyles.green.dim(string),
   ],
+
+
+  // Inline
   hr: string => ansiStyles.dim(string),
-  listitem: string => ansiStyles.magenta(string),
-  table: string => ansiStyles.reset(string),
-  strong: string => ansiStyles.red.bold(string),
-  em: string => ansiStyles.green(string),
-  codespan: string => ansiStyles.yellow(string),
+  strong: string => ansiStyles.bold(string),
+  em: string => ansiStyles.italic(string),
   del: string => ansiStyles.dim.reset.strikethrough(string),
   link: string => ansiStyles.blue(string),
   href: string => ansiStyles.blue.underline(string),
   image: string => ansiStyles.cyan(string),
   doneMark: string => ansiStyles.green.bold(string),
   undoneMark: string => ansiStyles.red.bold(string),
-  paragraph: identity,
-  text: identity,
+
   unescape: true,
   emoji: true,
   breaks: true,
   indent: '  ',
   smallIndent: ' ',
-  tableOptions: {},
 };
 
 class Renderer {
-  constructor(options, highlightOptions) {
+  constructor(options) {
     this.o = { ...defaultOptions, ...options };
     this.indent = sanitizeTab(this.o.indent, defaultOptions.indent);
     this.smallIndent = sanitizeTab(this.o.smallIndent, defaultOptions.smallIndent);
-    this.tableSettings = this.o.tableOptions;
     this.emoji = this.o.emoji ? insertEmojis : identity;
     this.unescape = this.o.unescape ? unescapeEntities : identity;
-    this.highlightOptions = highlightOptions || {};
     this.transform = compose(undoColon, this.unescape, this.emoji);
   }
 
@@ -97,7 +101,7 @@ class Renderer {
    * @param {*} escaped
    */
   code(code, lang, escaped) {
-    return section(indentify(this.o.smallIndent, highlight(code, lang, this.o, this.highlightOptions)));
+    return section(indentify(this.o.smallIndent, highlight(code, lang, this.o)));
   }
 
   /**
@@ -202,10 +206,7 @@ class Renderer {
    */
   table(header, body) {
     const table = new Table(({
-      ...{
-        head: generateTableRow(header)[0],
-      },
-      ...this.tableSettings,
+      head: generateTableRow(header)[0],
     }));
     generateTableRow(body, this.transform).forEach((row) => {
       table.push(row);

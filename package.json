@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
+    "@types/node": "^12.6.2",
     "eslint": "^6.0.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-standard-jsdoc": "^9.0.0",
