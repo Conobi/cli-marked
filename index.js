@@ -120,7 +120,7 @@ class Renderer {
    * @param {*} html
    */
   html(html) {
-    return `+${this.o.html(html)}-`;
+    return this.o.html(html);
   }
 
   /**
