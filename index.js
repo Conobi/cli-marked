@@ -39,39 +39,41 @@ const defaultOptions = {
   // Base
   paragraph: identity,
   text: identity,
-  codespan: string => ansiStyles.yellow(string),
-  code: string => ansiStyles.yellow(string),
-  html: string => ansiStyles.gray(string),
-  listitem: string => ansiStyles.magenta(string),
+  codespan: ansiStyles.yellow,
+  code: ansiStyles.yellow,
+  html: ansiStyles.gray,
+  listitem: ansiStyles.magenta,
 
   // Block
-  blockquote: string => ansiStyles.gray.italic(string),
-  blockquoteText: string => ansiStyles.dim.italic(string),
-  table: string => ansiStyles.reset(string),
+  blockquote: ansiStyles.gray.italic,
+  blockquoteText: ansiStyles.dim.italic,
+  table: ansiStyles.reset,
   headers: [
-    string => ansiStyles.red.underline.bold(string),
-    string => ansiStyles.yellow.underline.bold(string),
-    string => ansiStyles.yellow.underline.bold(string),
-    string => ansiStyles.green.underline(string),
-    string => ansiStyles.green(string),
-    string => ansiStyles.green.dim(string),
+    ansiStyles.red.underline.bold,
+    ansiStyles.yellow.underline.bold,
+    ansiStyles.yellow.underline.bold,
+    ansiStyles.green.underline,
+    ansiStyles.green,
+    ansiStyles.green.dim,
   ],
 
 
   // Inline
-  hr: string => ansiStyles.dim(string),
-  strong: string => ansiStyles.bold(string),
-  em: string => ansiStyles.italic(string),
-  del: string => ansiStyles.dim.reset.strikethrough(string),
-  link: string => ansiStyles.blue(string),
-  href: string => ansiStyles.blue.underline(string),
-  image: string => ansiStyles.cyan(string),
-  doneMark: string => ansiStyles.green.bold(string),
-  undoneMark: string => ansiStyles.red.bold(string),
-
+  hr: ansiStyles.dim,
+  strong: ansiStyles.bold,
+  em: ansiStyles.italic,
+  del: ansiStyles.dim.reset.strikethrough,
+  link: ansiStyles.blue,
+  href: ansiStyles.blue.underline,
+  image: ansiStyles.cyan,
+  doneMark: ansiStyles.green.bold,
+  undoneMark: ansiStyles.red.bold,
   unescape: true,
   emoji: true,
-  breaks: true,
+  breaks: false,
+  gfm: true,
+  mangle: false,
+  smartypants: true,
   indent: '  ',
   smallIndent: ' ',
 };
@@ -118,7 +120,7 @@ class Renderer {
    * @param {*} html
    */
   html(html) {
-    return this.o.html(html);
+    return `+${this.o.html(html)}-`;
   }
 
   /**
