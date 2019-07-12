@@ -10,7 +10,7 @@
 1. Secont 
 1. Third
 
-### List whth checkboxes
+### List with checkboxes
 
 * [X] First 
 * [X] Secont 
