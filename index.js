@@ -2,7 +2,7 @@
 /* eslint-disable jsdoc/require-example */
 /* eslint-disable jsdoc/require-returns */
 /** @typedef {import('chalk')} chalk  */
-const Table = require('cli-table');
+const Table = require('cli-table3');
 const ansiEscapes = require('ansi-escapes');
 const ansiStyles = require('ansi-colors');
 const supportsHyperlinks = require('supports-hyperlinks');
@@ -86,6 +86,8 @@ class Renderer {
     this.emoji = this.o.emoji ? insertEmojis : identity;
     this.unescape = this.o.unescape ? unescapeEntities : identity;
     this.transform = compose(undoColon, this.unescape, this.emoji);
+    this.row = [];
+    this.tableContent = [];
   }
 
   /**
@@ -208,9 +210,9 @@ class Renderer {
    */
   table(header, body) {
     const table = new Table(({
-      head: generateTableRow(header)[0],
+      head: this.tableContent.shift(),
     }));
-    generateTableRow(body, this.transform).forEach((row) => {
+    this.tableContent.forEach((row) => {
       table.push(row);
     });
     return section(this.o.table(table.toString()));
@@ -221,7 +223,10 @@ class Renderer {
    * @param {*} content
    */
   tablerow(content) {
-    return `${TABLE_ROW_WRAP + content + TABLE_ROW_WRAP}\n`;
+    this.tableContent.push(this.row);
+    this.row = [];
+    return '';
+    // return `${TABLE_ROW_WRAP + content + TABLE_ROW_WRAP}\n`;
   }
 
   /**
@@ -230,7 +235,8 @@ class Renderer {
    * @param {*} flags
    */
   tablecell(content, flags) {
-    return content + TABLE_CELL_SPLIT;
+    this.row.push({ content, hAlign: flags.align });
+    return '';
   }
 
   /**

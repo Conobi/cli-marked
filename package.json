@@ -30,7 +30,7 @@
     "ansi-styles": "^4.0.0",
     "boxen": "github:horosgrisa/boxen",
     "cli-highlight": "^2.1.1",
-    "cli-table": "^0.3.1",
+    "cli-table3": "^0.5.1",
     "hr": "^0.1.3",
     "node-emoji": "^1.10.0",
     "strip-ansi": "^5.2.0",
