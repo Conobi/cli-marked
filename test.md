@@ -1,17 +1,17 @@
 ### Unordered list
 
 * First 
-* Secont 
+* Second
 * Third
 
 ### Ordered list
 
 1. First 
-1. Secont 
+1. Second
 1. Third
 
 ### List with checkboxes
 
 * [X] First 
-* [X] Secont 
+* [X] Second
 * [ ] Third
