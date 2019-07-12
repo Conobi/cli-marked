@@ -64,17 +64,6 @@ describe('Renderer', () => {
     assert.equal(marked(text, markedOptions).trim(), expected);
   });
 
-  it('should pass on options to table', () => {
-    const text = '| Lorem | Ipsum | Sit amet     | Dolar  |\n'
-    + '|------|------|----------|----------|\n'
-    + '| Row 1  | Value    | Value  | Value |\n'
-    + '| Row 2  | Value    | Value  | Value |\n'
-    + '| Row 3  | Value    | Value  | Value |\n'
-    + '| Row 4  | Value    | Value  | Value |';
-
-    assert.notEqual(marked(text, markedOptions).indexOf('@@@@TABLE@@@@@'), -1);
-  });
-
   it('should not show link href twice if link and url is equal', () => {
     const text = 'http://google.com';
     assert.equal(marked(text, markedOptions).trim(), text);
@@ -91,7 +80,7 @@ describe('Renderer', () => {
       + 'This < is **"foo"**. it\'s a & string\n'
       + 'This < is "foo". it\'s a & string';
 
-    const expected = '# This < is "foo". it\'s a & string\n\n'
+    const expected = '§ THIS < IS "FOO". IT\'S A & STRING\n\n'
       + '│ This < is "foo". it\'s a & string\n\n'
       + 'This < is "foo". it\'s a & string\n'
       + 'This < is "foo". it\'s a & string';
@@ -114,18 +103,9 @@ describe('Renderer', () => {
     assert.notEqual(marked(markdownText, markedOptions).indexOf(':someundefined:'), -1);
   });
 
-  it('should not escape entities', () => {
-    const markdownText = 'Usage | Syntax' + '\r\n'
-    + '------|-------' + '\r\n'
-    + 'General |`$ shell <CommandParam>`';
-
-    assert.notEqual(marked(markdownText, markedOptions).indexOf('<CommandParam>'), -1);
-  });
-
-
   it('should nuke section header', () => {
     text = '# Contents\n',
-    expected = '\nContents\n';
+    expected = '\n § CONTENTS\n';
     assert.equal(markup(text), expected);
   });
 

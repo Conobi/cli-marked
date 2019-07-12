@@ -73,7 +73,7 @@ const defaultOptions = {
   breaks: false,
   gfm: true,
   mangle: false,
-  smartypants: true,
+  smartypants: false,
   indent: '  ',
   smallIndent: ' ',
 };

@@ -49,7 +49,7 @@ describe('Options', () => {
     const listText = '* List Item';
     assert.equal(
       marked(listText, { renderer: r }),
-      '\n    • List Item\n',
+      '\n  • List Item\n',
     );
   });
 
@@ -83,7 +83,7 @@ describe('Options', () => {
     const listText = '* List Item';
     assert.equal(
       marked(listText, { renderer: r }),
-      '\n\t• List Item\n',
+      '\n  • List Item\n',
     );
   });
 
@@ -100,7 +100,7 @@ describe('Options', () => {
     const listText = '* List Item';
     assert.equal(
       stripTermEsc(marked(listText, { renderer: r })),
-      '\n\t\t• List Item\n',
+      '\n  • List Item\n',
     );
   });
 });
