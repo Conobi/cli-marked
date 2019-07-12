@@ -1,5 +1,17 @@
-| 1 | 2 | 3 | sd                        |                     d |
-|---|---|---|:-------------------------:|----------------------:|
-| a | s | d | *sdffsdfsdfsd fsd fsdfsd* |                    sd |
-| q | w | t |         sdfsd  sdff       | sdfsdfsdfsdfsdfsdfsdf |
-|   | e | r | sdf                       |                   sdf |
+### Unordered list
+
+* First 
+* Secont 
+* Third
+
+### Ordered list
+
+1. First 
+1. Secont 
+1. Third
+
+### List whth checkboxes
+
+* [X] First 
+* [X] Secont 
+* [ ] Third
