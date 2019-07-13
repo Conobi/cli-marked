@@ -70,3 +70,5 @@ function listitem(text, checkboxes) {
   return `\n${this.o.listitem(BULLET_POINT)}${transform(text)}`;
 }
 ```
+
+> Long line. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed efficitur sapien et volutpat molestie. Curabitur facilisis rutrum luctus. Ut nec justo dui
