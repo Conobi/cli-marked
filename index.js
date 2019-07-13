@@ -214,6 +214,7 @@ class Renderer {
     this.tableContent.forEach((row) => {
       table.push(row);
     });
+    this.tableContent = [];
     return section(this.o.table(table.toString()));
   }
 
