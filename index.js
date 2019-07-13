@@ -48,7 +48,7 @@ const defaultOptions = {
   headers: [
     ansiStyles.red.underline.bold,
     ansiStyles.yellow.underline.bold,
-    ansiStyles.yellow.underline.bold,
+    ansiStyles.yellow.underline,
     ansiStyles.green.underline,
     ansiStyles.green,
     ansiStyles.green.dim,
