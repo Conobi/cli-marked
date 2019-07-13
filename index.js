@@ -21,6 +21,7 @@ const {
   indentLines,
   hr,
   header,
+  removeNewLines,
 } = require('./lib/functions');
 
 
@@ -89,6 +90,16 @@ class Renderer {
    */
   text(text) {
     return this.o.text(text);
+  }
+
+  /**
+   *
+   * @param {*} text
+   */
+  paragraph(text) {
+    const transform = compose(this.o.paragraph, this.transform, removeNewLines);
+    text = transform(text);
+    return section(text);
   }
 
   /**
@@ -185,15 +196,6 @@ class Renderer {
       : this.o.undoneMark(BULLET_UNDONE)} `;
   }
 
-  /**
-   *
-   * @param {*} text
-   */
-  paragraph(text) {
-    const transform = compose(this.o.paragraph, this.transform);
-    text = transform(text);
-    return section(text);
-  }
 
   /**
    *
