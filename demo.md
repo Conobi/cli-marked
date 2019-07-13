@@ -71,4 +71,4 @@ function listitem(text, checkboxes) {
 }
 ```
 
-> Long line. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed efficitur sapien et volutpat molestie. Curabitur facilisis rutrum luctus. Ut nec justo dui
+> Long line. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed efficitur sapien et volutpat molestie. Curabitur facilisis rutrum luctus. Ut nec justo dui.
