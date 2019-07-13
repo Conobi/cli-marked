@@ -21,24 +21,15 @@ npm i -g cli-marked
 ## Example
 
 ```sh
-md README.md
+md demo.md
 ```
 
 This will produce the following:
 
 ![Screenshot of marked-terminal](./screenshot.png)
 
-### Tables
 
-![Table](./table.png)
-
-### Lists
-
-![List](./list.png)
-
-### Headers
-
-![Headers](./headers.png)
+![Screenshot of marked-terminal](./screenshot2.png)
 
 ## Run tests
 

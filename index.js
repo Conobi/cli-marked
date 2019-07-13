@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable jsdoc/require-example */
 /* eslint-disable jsdoc/require-returns */
-/** @typedef {import('chalk')} chalk  */
+/** @typedef {import('chalk')} Chalk  */
 const Table = require('cli-table3');
 const ansiEscapes = require('ansi-escapes');
 const ansiStyles = require('ansi-colors');
@@ -173,7 +173,6 @@ class Renderer {
    * @param {*} text
    */
   listitem(text, checkboxes) {
-    // console.log('++++---', argument);
     const transform = compose(this.transform);
     const isNested = text.includes('\n');
     if (isNested) { text = text.trim(); }
