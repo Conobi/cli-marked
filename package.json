@@ -26,6 +26,7 @@
   "author": "Grigorii Horos",
   "license": "MIT",
   "dependencies": {
+    "ansi-colors": "^4.1.1",
     "ansi-escapes": "^4.2.0",
     "ansi-styles": "^4.0.0",
     "boxen": "github:horosgrisa/boxen",
@@ -36,8 +37,7 @@
     "marked": "0.7.0",
     "node-emoji": "^1.10.0",
     "strip-ansi": "^5.2.0",
-    "supports-hyperlinks": "^1.0.1",
-    "word-wrap": "^1.2.3"
+    "supports-hyperlinks": "^1.0.1"
   },
   "directories": {
     "example": "example"
