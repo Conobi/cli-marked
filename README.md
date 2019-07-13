@@ -36,6 +36,10 @@ This will produce the following:
 
 ![List](./list.png)
 
+### Headers
+
+![Headers](./headers.png)
+
 ## Run tests
 
 ```sh
