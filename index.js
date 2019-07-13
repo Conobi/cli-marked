@@ -19,15 +19,12 @@ const {
   highlight,
   sanitizeTab,
   indentLines,
-  generateTableRow,
   hr,
   header,
 } = require('./lib/functions');
 
 
 const {
-  TABLE_CELL_SPLIT,
-  TABLE_ROW_WRAP,
   COLON_REPLACER,
   BULLET_POINT,
   BULLET_DONE,
@@ -70,7 +67,7 @@ const defaultOptions = {
   undoneMark: ansiStyles.red.bold,
   unescape: true,
   emoji: true,
-  breaks: false,
+  breaks: true,
   gfm: true,
   mangle: false,
   smartypants: false,

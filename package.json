@@ -36,7 +36,8 @@
     "marked": "0.7.0",
     "node-emoji": "^1.10.0",
     "strip-ansi": "^5.2.0",
-    "supports-hyperlinks": "^1.0.1"
+    "supports-hyperlinks": "^1.0.1",
+    "word-wrap": "^1.2.3"
   },
   "directories": {
     "example": "example"
