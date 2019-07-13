@@ -10,6 +10,11 @@ const c = {
 
 marked.setOptions({
   renderer: new TerminalRenderer(c),
+  mangle: false,
+  emoji: true,
+  breaks: false,
+  gfm: true,
+  smartypants: true,
 });
 
 if (process.argv.length < 3) {

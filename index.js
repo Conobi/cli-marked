@@ -65,14 +65,10 @@ const defaultOptions = {
   image: ansiStyles.cyan,
   doneMark: ansiStyles.green.bold,
   undoneMark: ansiStyles.red.bold,
-  unescape: true,
-  emoji: true,
-  breaks: true,
-  gfm: true,
-  mangle: false,
-  smartypants: false,
   indent: '  ',
   smallIndent: ' ',
+  unescape: true,
+
 };
 
 class Renderer {
