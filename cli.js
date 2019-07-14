@@ -14,7 +14,7 @@ marked.setOptions({
   emoji: true,
   breaks: false,
   gfm: true,
-  smartypants: true,
+  smartypants: false,
 });
 
 if (process.argv.length < 3) {

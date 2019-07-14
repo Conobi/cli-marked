@@ -20,7 +20,7 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 
 - Bullet list item
 - Bullet list item
-- Bullet list item
+- Bullet list item Bullet list item Bullet list item Bullet list item Bullet list item Bullet list item Bullet list item Bullet list item
   - Use a two-space indent for nested lists
 
 ### Ordered list
