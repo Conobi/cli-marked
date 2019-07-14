@@ -77,12 +77,12 @@ describe('Renderer', () => {
   it('should not escape entities', () => {
     const text = '# This < is "foo". it\'s a & string\n'
       + '> This < is "foo". it\'s a & string\n\n'
-      + 'This < is **"foo"**. it\'s a & string\n'
+      + 'This < is **"foo"**. it\'s a & string\n\n'
       + 'This < is "foo". it\'s a & string';
 
-    const expected = '§ THIS < IS "FOO". IT\'S A & STRING\n\n'
+    const expected = '§ This < is "foo". it\'s a & string\n\n'
       + '│ This < is "foo". it\'s a & string\n\n'
-      + 'This < is "foo". it\'s a & string\n'
+      + 'This < is "foo". it\'s a & string\n\n'
       + 'This < is "foo". it\'s a & string';
     assert.equal(stripTermEsc(marked(text, markedOptions).trim()), expected);
   });
@@ -105,7 +105,7 @@ describe('Renderer', () => {
 
   it('should nuke section header', () => {
     text = '# Contents\n',
-    expected = '\n § CONTENTS\n';
+    expected = '\n § Contents\n';
     assert.equal(markup(text), expected);
   });
 
