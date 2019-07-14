@@ -36,6 +36,7 @@
     "languages-aliases": "^2.0.1",
     "marked": "0.7.0",
     "node-emoji": "^1.10.0",
+    "normalize-html-whitespace": "^1.0.0",
     "strip-ansi": "^5.2.0",
     "supports-hyperlinks": "^1.0.1",
     "wrap-ansi": "^6.0.0"
