@@ -1,34 +1,34 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable jsdoc/require-example */
-/* eslint-disable jsdoc/require-returns */
-/** @typedef {import('chalk')} Chalk  */
+/* eslint-disable jsdoc/require-returns,jsdoc/require-example,class-methods-use-this */
 const Table = require('cli-table3');
-const ansiEscapes = require('ansi-escapes');
 const ansiStyles = require('ansi-colors');
-const supportsHyperlinks = require('supports-hyperlinks');
+const compose = require('compose-function');
 
+const marked = require('marked');
 const {
   list,
   identity,
-  insertEmojis,
-  unescapeEntities,
-  compose,
-  undoColon,
   section,
   indentify,
-  highlight,
   sanitizeTab,
-  indentLines,
+  indentList,
   hr,
   header,
   wrapWords,
   removeNewLines,
-  semiSection,
-} = require('./lib/functions');
+  cleanText,
+} = require('./lib/utils');
+
+const { renderLink } = require('./lib/link');
+const { renderImage } = require('./lib/image');
+const {
+  renderCode,
+  renderCodespan,
+} = require('./lib/code');
+
+const { renderListItem } = require('./lib/list');
 
 
 const {
-  BULLET_POINT,
   BULLET_DONE,
   BULLET_UNDONE,
   HEADER_SYMBOL,
@@ -56,7 +56,6 @@ const defaultOptions = {
     ansiStyles.green.dim,
   ],
 
-
   // Inline
   hr: ansiStyles.dim,
   strong: ansiStyles.bold,
@@ -67,86 +66,51 @@ const defaultOptions = {
   image: ansiStyles.cyan,
   doneMark: ansiStyles.green.bold,
   undoneMark: ansiStyles.red.bold,
+
   indent: '  ',
   smallIndent: ' ',
-  unescape: true,
 
 };
 
-class Renderer {
+class Renderer extends marked.Renderer {
   constructor(options) {
+    super();
     this.o = { ...defaultOptions, ...options };
     this.indent = sanitizeTab(this.o.indent, defaultOptions.indent);
     this.smallIndent = sanitizeTab(this.o.smallIndent, defaultOptions.smallIndent);
-    this.emoji = this.o.emoji ? insertEmojis : identity;
-    this.unescape = this.o.unescape ? unescapeEntities : identity;
-    this.transform = compose(undoColon, this.unescape, this.emoji);
+
     this.row = [];
     this.tableContent = [];
   }
 
-  /**
-   *
-   * @param {*} text
-   */
   text(text) {
     const transform = compose(
       this.o.text,
-      // wrapWords,
+      cleanText,
       removeNewLines,
     );
 
     return transform(text);
   }
 
-  /**
-   *
-   * @param {*} text
-   */
   paragraph(text) {
     const transform = compose(
       section,
       this.o.paragraph,
-      this.transform,
       wrapWords,
     );
 
     return transform(text);
   }
 
-  /**
-   *
-   * @param {*} code
-   * @param {*} lang
-   * @param {*} escaped
-   */
   code(code, lang, escaped) {
-    const transform = compose(
-      section,
-      string => indentify(this.o.smallIndent, highlight(string, lang, this.o)),
-    );
-
-    return transform(code);
+    return renderCode(code, lang, escaped, this.o.smallIndent);
   }
 
-  /**
-   *
-   * @param {*} text
-   */
   codespan(text) {
-    const transform = compose(
-      string => this.o.codespan(string),
-      this.transform,
-    );
-
-    return transform(text);
+    return renderCodespan(text, this.o.codespan);
   }
 
-  /**
-   * FIXME: I'm not sure that this works i all cases.
-   *
-   * @param {*} html
-   */
   html(html) {
     const transform = compose(
       string => this.o.html(string),
@@ -155,87 +119,46 @@ class Renderer {
     return transform(html);
   }
 
-  /**
-   *
-   * @param {*} quote
-   */
   blockquote(quote) {
     const transform = compose(
       section,
-      string => indentify(
-        this.o.blockquote('│ '),
-        this.o.blockquoteText(string.trim()),
-      ),
+      indentify(this.o.blockquote('│ ')),
+      string => this.o.blockquoteText(string.trim()),
     );
 
     return transform(quote);
   }
 
 
-  /**
-   *
-   * @param {*} text
-   * @param {*} level
-   * @param {*} raw
-   */
   heading(text, level, raw) {
     const transform = compose(
       section,
       header,
-      this.transform,
+      cleanText,
       string => this.o.headers[level - 1](string),
     );
 
     return transform(`${HEADER_SYMBOL} ${text}`);
   }
 
-  /**
-   *
-   */
   hr() {
     return section(this.o.hr(hr('─', this.o.width)));
   }
 
-  /**
-   *
-   * @param {*} body
-   * @param {*} ordered
-   */
   list(body, ordered) {
     const transform = compose(
       section,
       string => list(string, ordered, this.indent),
-      string => indentLines(this.indent, string),
+      indentList(this.indent),
     );
 
     return transform(body);
   }
 
-  /**
-   *
-   * @param {*} text
-   */
   listitem(text, checkboxes) {
-    const transform = compose(
-      semiSection,
-      this.transform,
-      wrapWords,
-    );
-
-    const bullet = this.o.listitem(BULLET_POINT);
-
-    const isNested = text.includes('\n');
-    if (isNested) { text = text.trim(); }
-    if (checkboxes) {
-      return transform(text);
-    }
-
-    return transform(bullet + text);
+    return renderListItem(text, checkboxes, this.o.listitem);
   }
 
-  /**
-   * @param {any} checked
-   */
   checkbox(checked) {
     return `${checked
       ? this.o.doneMark(BULLET_DONE)
@@ -243,12 +166,7 @@ class Renderer {
   }
 
 
-  /**
-   *
-   * @param {*} header
-   * @param {*} body
-   */
-  table(header, body) {
+  table() {
     const transform = compose(
       section,
       string => this.o.table(string),
@@ -257,39 +175,27 @@ class Renderer {
     const table = new Table(({
       head: this.tableContent.shift(),
     }));
+
     this.tableContent.forEach((row) => {
       table.push(row);
     });
+
     this.tableContent = [];
 
     return transform(table.toString());
   }
 
-  /**
-   *
-   * @param {*} content
-   */
-  tablerow(content) {
+  tablerow() {
     this.tableContent.push(this.row);
     this.row = [];
     return '';
   }
 
-  /**
-   *
-   * @param {*} content
-   * @param {*} flags
-   */
   tablecell(content, flags) {
     this.row.push({ content, hAlign: flags.align });
     return '';
   }
 
-  /**
-   * Span level renderer.
-   *
-   * @param {*} text
-   */
   strong(text) {
     const transform = compose(
       string => this.o.strong(string),
@@ -298,10 +204,6 @@ class Renderer {
     return transform(text);
   }
 
-  /**
-   *
-   * @param {*} text
-   */
   em(text) {
     const transform = compose(
       string => this.o.em(string),
@@ -311,17 +213,10 @@ class Renderer {
   }
 
 
-  /**
-   *
-   */
   br() {
     return '\n';
   }
 
-  /**
-   *
-   * @param {*} text
-   */
   del(text) {
     const transform = compose(
       string => this.o.del(string),
@@ -330,48 +225,15 @@ class Renderer {
     return transform(text);
   }
 
-  /**
-   *
-   * @param {*} href
-   * @param {*} title
-   * @param {*} text
-   */
   link(href, title, text) {
-    // eslint-disable-next-line no-script-url
-    if (href.indexOf('javascript:') === 0) {
-      return '';
-    }
-
-    const hasText = text && text !== href;
-    let out = '';
-    if (supportsHyperlinks.stdout) {
-      let link = '';
-      if (text) {
-        link = this.emoji(text);
-      } else {
-        link = href;
-      }
-      if (title) { link += ` – ${title}`; }
-      out = this.o.href(ansiEscapes.link(link, href));
-    } else {
-      if (hasText) { out += `${this.o.link(this.emoji(text))} (`; }
-      out += this.o.href(href);
-      if (hasText) { out += ')'; }
-    }
-
-    return out;
+    return renderLink(href, title, text, {
+      href: this.o.href,
+      link: this.o.link,
+    });
   }
 
-  /**
-   *
-   * @param {*} href
-   * @param {*} title
-   * @param {*} text
-   */
   image(href, title, text) {
-    let out = `![${text}`;
-    if (title) { out += ` – ${title}`; }
-    return this.o.image(`${out}]`);
+    return renderImage(href, title, text, this.o.image);
   }
 }
 
