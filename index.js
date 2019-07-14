@@ -5,15 +5,13 @@ const marked = require('marked');
 const { renderLink } = require('./lib/link');
 const { renderImage } = require('./lib/image');
 const { renderCode, renderCodespan } = require('./lib/code');
-const { renderListItem } = require('./lib/list');
+const { renderListItem, renderList } = require('./lib/list');
 const { renderHeading } = require('./lib/heading');
 const { renderBlockquote } = require('./lib/blockquote');
 const { renderTable, renderTablerow, renderTablecell } = require('./lib/table');
 
 const {
-  list,
   section,
-  indentList,
   hr,
   wrapWords,
   removeNewLines,
@@ -93,13 +91,7 @@ class Renderer extends marked.Renderer {
   }
 
   list(body, ordered) {
-    const transform = compose(
-      section,
-      string => list(string, ordered, this.o.indent),
-      indentList(this.o.indent),
-    );
-
-    return transform(body);
+    return renderList(body, ordered, this.o.indent);
   }
 
   listitem(text, checkboxes) {
