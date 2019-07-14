@@ -28,7 +28,7 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 1. Bullet list item
 2. Bullet list item
 3. Bullet list item
-  1. Ordered lists can also be nested
+  1. Ordered lists can also be nested Bullet list item Bullet list item Bullet list item Bullet list item Bullet list item Bullet list item
 
 ### List with checkboxes
 
