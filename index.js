@@ -92,8 +92,7 @@ class Renderer {
   text(text) {
     const transform = compose(
       this.o.text,
-      wrapWords,
-
+      // wrapWords,
       removeNewLines,
     );
 
@@ -109,6 +108,7 @@ class Renderer {
       section,
       this.o.paragraph,
       this.transform,
+      wrapWords,
     );
 
     return transform(text);
@@ -219,6 +219,7 @@ class Renderer {
     const transform = compose(
       semiSection,
       this.transform,
+      wrapWords,
     );
 
     const bullet = this.o.listitem(BULLET_POINT);
