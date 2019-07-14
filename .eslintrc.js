@@ -18,6 +18,7 @@ module.exports = {
     'prefer-object-spread',
     'promise',
     'security',
+    'simple-import-sort',
   ],
   env: {
     browser: true,
@@ -33,5 +34,8 @@ module.exports = {
     'unicorn/import-index': 0,
     'import/extensions': 0,
     'prefer-object-spread/prefer-object-spread': 2,
+    'sort-imports': 'off',
+    'import/order': 'off',
+    'simple-import-sort/sort': 'error',
   },
 };
