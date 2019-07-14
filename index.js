@@ -2,13 +2,13 @@
 const compose = require('compose-function');
 const marked = require('marked');
 
-const { renderLink } = require('./lib/link');
-const { renderImage } = require('./lib/image');
-const { renderCode, renderCodespan } = require('./lib/code');
-const { renderListItem, renderList } = require('./lib/list');
-const { renderHeading } = require('./lib/heading');
-const { renderBlockquote } = require('./lib/blockquote');
-const { renderTable, renderTablerow, renderTablecell } = require('./lib/table');
+const { renderLink } = require('./lib/render/link');
+const { renderImage } = require('./lib/render/image');
+const { renderCode, renderCodespan } = require('./lib/render/code');
+const { renderListItem, renderList } = require('./lib/render/list');
+const { renderHeading } = require('./lib/render/heading');
+const { renderBlockquote } = require('./lib/render/blockquote');
+const { renderTable, renderTablerow, renderTablecell } = require('./lib/render/table');
 
 const {
   section,
