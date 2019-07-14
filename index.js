@@ -21,12 +21,13 @@ const {
   indentLines,
   hr,
   header,
+  wrapWords,
   removeNewLines,
+  semiSection,
 } = require('./lib/functions');
 
 
 const {
-  COLON_REPLACER,
   BULLET_POINT,
   BULLET_DONE,
   BULLET_UNDONE,
@@ -89,7 +90,14 @@ class Renderer {
    * @param {*} text
    */
   text(text) {
-    return this.o.text(text);
+    const transform = compose(
+      this.o.text,
+      wrapWords,
+
+      removeNewLines,
+    );
+
+    return transform(text);
   }
 
   /**
@@ -97,9 +105,13 @@ class Renderer {
    * @param {*} text
    */
   paragraph(text) {
-    const transform = compose(this.o.paragraph, this.transform, removeNewLines);
-    text = transform(text);
-    return section(text);
+    const transform = compose(
+      section,
+      this.o.paragraph,
+      this.transform,
+    );
+
+    return transform(text);
   }
 
   /**
@@ -109,7 +121,12 @@ class Renderer {
    * @param {*} escaped
    */
   code(code, lang, escaped) {
-    return section(indentify(this.o.smallIndent, highlight(code, lang, this.o)));
+    const transform = compose(
+      section,
+      string => indentify(this.o.smallIndent, highlight(string, lang, this.o)),
+    );
+
+    return transform(code);
   }
 
   /**
@@ -117,7 +134,12 @@ class Renderer {
    * @param {*} text
    */
   codespan(text) {
-    return this.o.codespan(`\`${text.replace(/:/g, COLON_REPLACER)}\``);
+    const transform = compose(
+      string => this.o.codespan(string),
+      this.transform,
+    );
+
+    return transform(text);
   }
 
   /**
@@ -126,7 +148,11 @@ class Renderer {
    * @param {*} html
    */
   html(html) {
-    return this.o.html(html);
+    const transform = compose(
+      string => this.o.html(string),
+    );
+
+    return transform(html);
   }
 
   /**
@@ -134,10 +160,15 @@ class Renderer {
    * @param {*} quote
    */
   blockquote(quote) {
-    return section(indentify(
-      this.o.blockquote('│ '),
-      this.o.blockquoteText(quote.trim()),
-    ));
+    const transform = compose(
+      section,
+      string => indentify(
+        this.o.blockquote('│ '),
+        this.o.blockquoteText(string.trim()),
+      ),
+    );
+
+    return transform(quote);
   }
 
 
@@ -148,10 +179,14 @@ class Renderer {
    * @param {*} raw
    */
   heading(text, level, raw) {
-    text = this.transform(text);
-    const prefix = `${HEADER_SYMBOL} `;
-    text = prefix + text;
-    return section(header(text, level, this.o.headers[level - 1]));
+    const transform = compose(
+      section,
+      header,
+      this.transform,
+      string => this.o.headers[level - 1](string),
+    );
+
+    return transform(`${HEADER_SYMBOL} ${text}`);
   }
 
   /**
@@ -167,9 +202,13 @@ class Renderer {
    * @param {*} ordered
    */
   list(body, ordered) {
-    // return `>${section(body)}>`;
-    body = `${indentLines(this.indent, body)}`;
-    return section(list(body, ordered, this.indent));
+    const transform = compose(
+      section,
+      string => list(string, ordered, this.indent),
+      string => indentLines(this.indent, string),
+    );
+
+    return transform(body);
   }
 
   /**
@@ -177,14 +216,20 @@ class Renderer {
    * @param {*} text
    */
   listitem(text, checkboxes) {
-    const transform = compose(this.transform);
+    const transform = compose(
+      semiSection,
+      this.transform,
+    );
+
+    const bullet = this.o.listitem(BULLET_POINT);
+
     const isNested = text.includes('\n');
     if (isNested) { text = text.trim(); }
     if (checkboxes) {
-      return `\n${transform(text)}`;
+      return transform(text);
     }
-    // Use BULLET_POINT as a marker for ordered or unordered list item
-    return `\n${this.o.listitem(BULLET_POINT)}${transform(text)}`;
+
+    return transform(bullet + text);
   }
 
   /**
@@ -203,6 +248,11 @@ class Renderer {
    * @param {*} body
    */
   table(header, body) {
+    const transform = compose(
+      section,
+      string => this.o.table(string),
+    );
+
     const table = new Table(({
       head: this.tableContent.shift(),
     }));
@@ -210,7 +260,8 @@ class Renderer {
       table.push(row);
     });
     this.tableContent = [];
-    return section(this.o.table(table.toString()));
+
+    return transform(table.toString());
   }
 
   /**
@@ -221,7 +272,6 @@ class Renderer {
     this.tableContent.push(this.row);
     this.row = [];
     return '';
-    // return `${TABLE_ROW_WRAP + content + TABLE_ROW_WRAP}\n`;
   }
 
   /**
@@ -240,7 +290,11 @@ class Renderer {
    * @param {*} text
    */
   strong(text) {
-    return this.o.strong(text);
+    const transform = compose(
+      string => this.o.strong(string),
+    );
+
+    return transform(text);
   }
 
   /**
@@ -248,7 +302,11 @@ class Renderer {
    * @param {*} text
    */
   em(text) {
-    return this.o.em(text);
+    const transform = compose(
+      string => this.o.em(string),
+    );
+
+    return transform(text);
   }
 
 
@@ -264,7 +322,11 @@ class Renderer {
    * @param {*} text
    */
   del(text) {
-    return this.o.del(text);
+    const transform = compose(
+      string => this.o.del(string),
+    );
+
+    return transform(text);
   }
 
   /**
@@ -274,20 +336,11 @@ class Renderer {
    * @param {*} text
    */
   link(href, title, text) {
-    let prot;
-    if (this.o.sanitize) {
-      try {
-        prot = decodeURIComponent(unescape(href))
-          .replace(/[^\w:]/g, '')
-          .toLowerCase();
-      } catch (error) {
-        return '';
-      }
-      // eslint-disable-next-line no-script-url
-      if (prot.indexOf('javascript:') === 0) {
-        return '';
-      }
+    // eslint-disable-next-line no-script-url
+    if (href.indexOf('javascript:') === 0) {
+      return '';
     }
+
     const hasText = text && text !== href;
     let out = '';
     if (supportsHyperlinks.stdout) {
@@ -298,14 +351,14 @@ class Renderer {
         link = href;
       }
       if (title) { link += ` – ${title}`; }
-      link = this.o.href(link);
-      out = ansiEscapes.link(link, href);
+      out = this.o.href(ansiEscapes.link(link, href));
     } else {
-      if (hasText) { out += `${this.emoji(text)} (`; }
+      if (hasText) { out += `${this.o.link(this.emoji(text))} (`; }
       out += this.o.href(href);
       if (hasText) { out += ')'; }
     }
-    return this.o.link(out);
+
+    return out;
   }
 
   /**
