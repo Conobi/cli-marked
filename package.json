@@ -11,7 +11,9 @@
     "fix": "eslint --quiet --fix *.js lib/*.js lib/*/*.js tests/*js .eslintrc.js --ignore-pattern '!.eslintrc.js'"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "lib/",
+    "cli.js"
   ],
   "keywords": [
     "marked",
