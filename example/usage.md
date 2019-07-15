@@ -3,6 +3,10 @@
 > component.json, bower.json, manifest.json and *.jquery.json.
 >
 >> Sub quote
+>>
+>>> Sub sub quote
+>>
+>> Another sub quote
 >
 > Other text
 
