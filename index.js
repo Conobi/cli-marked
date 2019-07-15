@@ -53,7 +53,7 @@ class Renderer extends marked.Renderer {
     const transform = compose(
       section,
       this.o.paragraph,
-      wrapWords,
+      // wrapWords,
     );
 
     return transform(text);
