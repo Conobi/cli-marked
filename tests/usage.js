@@ -152,13 +152,13 @@ describe('Renderer', () => {
     assert.equal(markup(ol),
       `${before
       }  1. ol item\n`
-      + `       1. ol item${
+      + `      1. ol item${
         after}`);
 
     assert.equal(markup(olul),
       `${before
       }  1. ol item\n`
-      + `       • ul item${
+      + `      • ul item${
         after}`);
 
     assert.equal(markup(ulol),
@@ -176,8 +176,8 @@ describe('Renderer', () => {
 
     assert.equal(markup(tasks),
       `${before
-      }  ✗ task item\n`
-      + `  ✓ task item${
+      }  ✖ task item \n`
+      + `  ✔ task item ${
         after}`);
   });
 });
