@@ -94,16 +94,17 @@ class Renderer extends marked.Renderer {
     return renderList(body, ordered, this.o.indent);
   }
 
-  listitem(text, checkboxes) {
-    return renderListItem(text, checkboxes, this.o.listitem);
+  listitem(text, checkboxes, checked) {
+    return renderListItem(text, checkboxes, checked, {
+      listitem: this.o.listitem,
+      doneMark: this.o.doneMark,
+      undoneMark: this.o.undoneMark,
+    });
   }
 
-  checkbox(checked) {
-    return `${checked
-      ? this.o.doneMark(BULLET_DONE)
-      : this.o.undoneMark(BULLET_UNDONE)} `;
+  checkbox() {
+    return '';
   }
-
 
   table() {
     return renderTable(this.tableContent, this.o.table);
