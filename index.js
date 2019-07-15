@@ -19,10 +19,6 @@ const {
   unescapeEntities,
   insertEmojis,
 } = require('./lib/utils');
-const {
-  BULLET_DONE,
-  BULLET_UNDONE,
-} = require('./lib/constants');
 const defaultOptions = require('./lib/options');
 
 
