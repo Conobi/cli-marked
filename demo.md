@@ -39,7 +39,7 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 [I'm an link](https://www.google.com)
 [I'm an link with title](https://www.google.com "Google's Homepage")
 
-![I'm an image](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png " Title Text")
+![I'm an image](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Title Text")
 
 | Fist                |       Second        |               Third |
 |:--------------------|:-------------------:|--------------------:|
@@ -72,3 +72,5 @@ function listitem(text, checkboxes) {
 ```
 
 > Long line. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed efficitur sapien et volutpat molestie. Curabitur facilisis rutrum luctus. Ut nec justo dui.
+
+
