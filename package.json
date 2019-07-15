@@ -29,7 +29,7 @@
     "ansi-colors": "^4.1.1",
     "ansi-escapes": "^4.2.0",
     "ansi-styles": "^4.0.0",
-    "boxen": "github:horosgrisa/fieldset-cli",
+    "fieldset": "github:horosgrisa/fieldset",
     "cli-highlight": "^2.1.1",
     "cli-table3": "^0.5.1",
     "compose-function": "^3.0.3",
