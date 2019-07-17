@@ -17,6 +17,7 @@ const {
   removeNewLines,
   undoColon,
   unescapeEntities,
+  insertEmojis,
 } = require('./lib/utils');
 const defaultOptions = require('./lib/options');
 
@@ -38,6 +39,7 @@ class Renderer extends marked.Renderer {
       undoColon,
       unescapeEntities,
       removeNewLines,
+      insertEmojis,
     );
 
     return transform(text);
