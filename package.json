@@ -33,7 +33,6 @@
     "cli-highlight": "^2.1.1",
     "cli-table3": "^0.5.1",
     "compose-function": "^3.0.3",
-    "emojic": "^1.1.15",
     "fieldset": "github:horosgrisa/fieldset",
     "figures": "^3.0.0",
     "languages-aliases": "^2.0.4",
