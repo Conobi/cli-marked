@@ -39,7 +39,7 @@
     "node-emoji": "^1.10.0",
     "normalize-html-whitespace": "^1.0.0",
     "strip-ansi": "^5.2.0",
-    "supports-hyperlinks": "^1.0.1",
+    "supports-hyperlinks": "^2.0.0",
     "wrap-ansi": "^6.0.0"
   },
   "directories": {
@@ -47,13 +47,13 @@
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.6.6",
-    "eslint": "^6.0.1",
+    "@types/node": "^12.6.8",
+    "eslint": "^6.1.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-standard-jsdoc": "^9.1.1",
     "eslint-plugin-async-await": "0.0.0",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-jsdoc": "^15.5.2",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsdoc": "^15.5.5",
     "eslint-plugin-no-loops": "^0.3.0",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "eslint-plugin-promise": "^4.2.1",
@@ -61,7 +61,7 @@
     "eslint-plugin-simple-import-sort": "^4.0.0",
     "eslint-plugin-unicorn": "^9.1.1",
     "marked": "^0.7.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.2.0"
   },
   "repository": {
     "type": "git",
