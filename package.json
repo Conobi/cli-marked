@@ -40,7 +40,8 @@
     "normalize-html-whitespace": "^1.0.0",
     "strip-ansi": "^5.2.0",
     "supports-hyperlinks": "^2.0.0",
-    "wrap-ansi": "^6.0.0"
+    "wrap-ansi": "^6.0.0",
+    "marked": "^0.7.0"
   },
   "directories": {
     "example": "example"
@@ -50,7 +51,7 @@
     "@types/node": "^12.6.8",
     "eslint": "^6.1.0",
     "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-config-standard-jsdoc": "^9.1.1",
+    "eslint-config-standard-jsdoc": "^9.2.0",
     "eslint-plugin-async-await": "0.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsdoc": "^15.5.5",
@@ -60,7 +61,6 @@
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-simple-import-sort": "^4.0.0",
     "eslint-plugin-unicorn": "^9.1.1",
-    "marked": "^0.7.0",
     "mocha": "^6.2.0"
   },
   "repository": {
