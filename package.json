@@ -1,6 +1,6 @@
 {
   "name": "cli-marked",
-  "version": "4.9.8",
+  "version": "4.9.9",
   "description": "A custom render for marked to output to the Terminal",
   "main": "index.js",
   "bin": {
