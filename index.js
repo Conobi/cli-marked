@@ -56,7 +56,7 @@ class Renderer extends marked.Renderer {
   }
 
   code(code, lang, escaped) {
-    return renderCode(code, lang, escaped, this.o.smallIndent);
+    return renderCode(code, lang, escaped, this.o.code, this.o.smallIndent);
   }
 
   codespan(text) {
