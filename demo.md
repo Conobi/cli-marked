@@ -1,5 +1,4 @@
-> Custom Renderer for [marked](https://github.com/chjj/marked) allowing for printing Markdown to the Terminal.
-> Supports pretty tables and syntax highlighting.
+> Custom Renderer for [marked](https://github.com/chjj/marked) allowing for printing Markdown to the Terminal. Supports pretty tables and syntax highlighting.
 
 # Header - level 1
 ## Header - level 2
