@@ -1,24 +1,45 @@
+// @ts-nocheck
+const restrictedGlobals = require('confusing-browser-globals');
+
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2019,
     sourceType: 'module',
   },
   extends: [
+    // Syntax and ~
     'eslint:recommended',
-    'airbnb-base',
-    'plugin:unicorn/recommended',
+    // 'es/browser',
+    'plugin:node/recommended',
+    // 'plugin:react/recommended',
     'plugin:promise/recommended',
     'standard-jsdoc',
+    'plugin:mocha/recommended',
+
+    // Funny
+    // 'plugin:you-dont-need-lodash-underscore/compatible',
+    'plugin:unicorn/recommended',
+    'plugin:security/recommended',
+    // 'plugin:jquery/slim',
+
+    // Global config
+    'airbnb-base',
+    // 'airbnb',
   ],
   plugins: [
+    // 'json',
+    // 'html',
     'no-loops',
     'unicorn',
+    'mocha',
+
+    // 'dollar-sign',
     'async-await',
     'prefer-object-spread',
     'promise',
     'security',
-    'simple-import-sort',
+    // 'simple-import-sort'
   ],
   env: {
     browser: true,
@@ -31,11 +52,12 @@ module.exports = {
   },
   rules: {
     'unicorn/filename-case': 1,
-    'unicorn/import-index': 0,
-    'import/extensions': 0,
+    // 'unicorn/import-index': 0,
+    // 'import/extensions': 0,
     'prefer-object-spread/prefer-object-spread': 2,
-    'sort-imports': 'off',
-    'import/order': 'off',
-    'simple-import-sort/sort': 'error',
+    'no-restricted-globals': ['error'].concat(restrictedGlobals),
+    // 'sort-imports': 'off',
+    // 'import/order': 'off',
+    // 'simple-import-sort/sort': 'error'
   },
 };

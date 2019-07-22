@@ -1,7 +1,8 @@
+/* eslint-disable prefer-arrow-callback, no-shadow, jsdoc/require-jsdoc */
 
 const assert = require('assert');
 const marked = require('marked');
-const Renderer = require('../');
+const Renderer = require('..');
 
 function stripTermEsc(string) {
   return string.replace(/\u001B\[\d{1,2}m/g, '');
@@ -25,80 +26,80 @@ options.forEach((opt) => {
 
 defaultOptions.emoji = false;
 
-describe('Options', () => {
+describe('Options', function fn() {
   const r = new Renderer(defaultOptions);
 
-  it('should not translate emojis', () => {
+  it('should not translate emojis', function fn() {
     const markdownText = 'Some :emoji:';
 
-    assert.notEqual(marked(markdownText, {
+    assert.notStrictEqual(marked(markdownText, {
       renderer: r,
     }).indexOf(':emoji:'), -1);
   });
 
-  it('should change tabs by space size', () => {
+  it('should change tabs by space size', function fn() {
     const options = ({ ...defaultOptions, ...{ tab: 4 } });
     const r = new Renderer(options);
 
     const blockquoteText = '> Blockquote';
-    assert.equal(
+    assert.strictEqual(
       stripTermEsc(marked(blockquoteText, { renderer: r })),
       '\n│ Blockquote\n',
     );
 
     const listText = '* List Item';
-    assert.equal(
+    assert.strictEqual(
       marked(listText, { renderer: r }),
       '\n  • List Item\n',
     );
   });
 
-  it('should use default tabs if passing not supported string', () => {
+  it('should use default tabs if passing not supported string', function fn() {
     const options = ({ ...defaultOptions, ...{ tab: 'dsakdskajhdsa' } });
     const r = new Renderer(options);
 
     const blockquoteText = '> Blockquote';
-    assert.equal(
+    assert.strictEqual(
       stripTermEsc(marked(blockquoteText, { renderer: r })),
       '\n│ Blockquote\n',
     );
 
     const listText = '* List Item';
-    assert.equal(
+    assert.strictEqual(
       marked(listText, { renderer: r }),
       '\n  • List Item\n',
     );
   });
 
-  it('should change tabs by allowed characters', () => {
+  it('should change tabs by allowed characters', function fn() {
     const options = ({ ...defaultOptions, ...{ tab: '\t' } });
     const r = new Renderer(options);
 
     const blockquoteText = '> Blockquote';
-    assert.equal(
+    assert.strictEqual(
       stripTermEsc(marked(blockquoteText, { renderer: r })),
       '\n│ Blockquote\n',
     );
 
     const listText = '* List Item';
-    assert.equal(
+    assert.strictEqual(
       marked(listText, { renderer: r }),
       '\n  • List Item\n',
     );
   });
 
-  it('should support mulitple tab characters', () => {
+  it('should support mulitple tab characters', function fn() {
     const options = ({ ...defaultOptions, ...{ tab: '\t\t' } });
     const r = new Renderer(options);
 
     const blockquoteText = '> Blockquote';
-    assert.equal(
+    assert.strictEqual(
       stripTermEsc(marked(blockquoteText, { renderer: r })),
       '\n│ Blockquote\n',
     );
 
     const listText = '* List Item';
-    assert.equal(
+    assert.strictEqual(
       stripTermEsc(marked(listText, { renderer: r })),
       '\n  • List Item\n',
     );

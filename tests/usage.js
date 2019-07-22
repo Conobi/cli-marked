@@ -1,9 +1,11 @@
+/* eslint-disable prefer-arrow-callback, no-shadow, jsdoc/require-jsdoc */
+
 const assert = require('assert');
 const marked = require('marked');
-const Renderer = require('../');
+const Renderer = require('..');
 
 
-const identity = function (o) {
+const identity = function fn(o) {
   return o;
 };
 
@@ -52,29 +54,29 @@ function markup(string, gfm = false) {
 }
 
 
-describe('Renderer', () => {
+describe('Renderer', function fn() {
   const r = new Renderer(defaultOptions);
   const markedOptions = {
     renderer: r,
   };
 
-  it('should render links', () => {
+  it('should render links', function fn() {
     const text = '[Google](http://google.com)';
     const expected = 'Google (http://google.com)';
-    assert.equal(marked(text, markedOptions).trim(), expected);
+    assert.strictEqual(marked(text, markedOptions).trim(), expected);
   });
 
-  it('should not show link href twice if link and url is equal', () => {
+  it('should not show link href twice if link and url is equal', function fn() {
     const text = 'http://google.com';
-    assert.equal(marked(text, markedOptions).trim(), text);
+    assert.strictEqual(marked(text, markedOptions).trim(), text);
   });
 
-  it('should render html as html', () => {
+  it('should render html as html', function fn() {
     const html = '<strong>foo</strong>';
-    assert.equal(marked(html, markedOptions).trim(), html);
+    assert.strictEqual(marked(html, markedOptions).trim(), html);
   });
 
-  it('should not escape entities', () => {
+  it('should not escape entities', function fn() {
     const text = '# This < is "foo". it\'s a & string\n'
       + '> This < is "foo". it\'s a & string\n\n'
       + 'This < is **"foo"**. it\'s a & string\n\n'
@@ -84,33 +86,33 @@ describe('Renderer', () => {
       + '│ This < is "foo". it\'s a & string\n\n'
       + 'This < is "foo". it\'s a & string\n\n'
       + 'This < is "foo". it\'s a & string';
-    assert.equal(stripTermEsc(marked(text, markedOptions).trim()), expected);
+    assert.strictEqual(stripTermEsc(marked(text, markedOptions).trim()), expected);
   });
 
-  it('should not translate emojis inside codespans', () => {
+  it('should not translate emojis inside codespans', function fn() {
     const markdownText = 'Some `:+1:`';
 
-    assert.notEqual(marked(markdownText, markedOptions).indexOf(':+1:'), -1);
+    assert.notStrictEqual(marked(markdownText, markedOptions).indexOf(':+1:'), -1);
   });
 
-  it('should translate emojis', () => {
+  it('should translate emojis', function fn() {
     const markdownText = 'Some :+1:';
-    assert.equal(marked(markdownText, markedOptions).indexOf(':+1'), -1);
+    assert.strictEqual(marked(markdownText, markedOptions).indexOf(':+1'), -1);
   });
 
-  it('should show default if not supported emojis', () => {
+  it('should show default if not supported emojis', function fn() {
     const markdownText = 'Some :someundefined:';
-    assert.notEqual(marked(markdownText, markedOptions).indexOf(':someundefined:'), -1);
+    assert.notStrictEqual(marked(markdownText, markedOptions).indexOf(':someundefined:'), -1);
   });
 
-  it('should nuke section header', () => {
-    text = '# Contents\n',
-    expected = '\n § Contents\n';
-    assert.equal(markup(text), expected);
+  it('should nuke section header', function fn() {
+    const text = '# Contents\n';
+    const expected = '\n § Contents\n';
+    assert.strictEqual(markup(text), expected);
   });
 
 
-  it('should render ordered and unordered list with same newlines', () => {
+  it('should render ordered and unordered list with same newlines', function fn() {
     const ul = '* ul item\n'
     + '* ul item';
     const ol = '1. ol item\n'
@@ -118,20 +120,20 @@ describe('Renderer', () => {
     const before = '\n';
     const after = '\n';
 
-    assert.equal(markup(ul),
+    assert.strictEqual(markup(ul),
       `${before
       }  • ul item\n`
       + `  • ul item${
         after}`);
 
-    assert.equal(markup(ol),
+    assert.strictEqual(markup(ol),
       `${before
       }  1. ol item\n`
       + `  2. ol item${
         after}`);
   });
 
-  it('should render nested lists', () => {
+  it('should render nested lists', function fn() {
     const ul = '* ul item\n'
     + '  * ul item';
     const ol = '1. ol item\n'
@@ -143,38 +145,38 @@ describe('Renderer', () => {
     const before = '\n';
     const after = '\n';
 
-    assert.equal(markup(ul),
+    assert.strictEqual(markup(ul),
       `${before
       }  • ul item\n`
       + `      • ul item${
         after}`);
 
-    assert.equal(markup(ol),
+    assert.strictEqual(markup(ol),
       `${before
       }  1. ol item\n`
       + `      1. ol item${
         after}`);
 
-    assert.equal(markup(olul),
+    assert.strictEqual(markup(olul),
       `${before
       }  1. ol item\n`
       + `      • ul item${
         after}`);
 
-    assert.equal(markup(ulol),
+    assert.strictEqual(markup(ulol),
       `${before
       }  • ul item\n`
       + `      1. ol item${
         after}`);
   });
 
-  it('should render task items', () => {
+  it('should render task items', function fn() {
     const tasks = '* [ ] task item\n'
     + '* [X] task item';
     const before = '\n';
     const after = '\n';
 
-    assert.equal(markup(tasks),
+    assert.strictEqual(markup(tasks),
       `${before
       }  ✖ task item \n`
       + `  ✔ task item ${
