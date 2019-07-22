@@ -55,7 +55,9 @@
     "eslint-plugin-async-await": "0.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsdoc": "^15.5.5",
+    "eslint-plugin-mocha": "^6.0.0",
     "eslint-plugin-no-loops": "^0.3.0",
+    "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-security": "^1.4.0",
@@ -70,5 +72,8 @@
   "bugs": {
     "url": "https://github.com/horosgrisa/cli-marked/issues"
   },
-  "homepage": "https://github.com/horosgrisa/cli-marked"
+  "homepage": "https://github.com/horosgrisa/cli-marked",
+  "engines": {
+    "node": ">=10"
+  }
 }

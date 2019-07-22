@@ -2,7 +2,7 @@
 const fs = require('fs');
 const marked = require('marked');
 
-const TerminalRenderer = require('./');
+const TerminalRenderer = require('.');
 
 
 const c = {

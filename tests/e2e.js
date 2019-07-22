@@ -1,12 +1,13 @@
+/* eslint-disable prefer-arrow-callback, no-shadow, jsdoc/require-jsdoc */
 
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const marked = require('marked');
-const Renderer = require('../');
+const Renderer = require('..');
 
 
-const identity = function (o) {
+const identity = function fn(o) {
   return o;
 };
 
@@ -38,10 +39,10 @@ function markup(string) {
   return stripTermEsc(marked(string, { renderer: r }));
 }
 
-describe('e2', () => {
-  it('should render a document full of different supported syntax', () => {
+describe('e2', function fn() {
+  it('should render a document full of different supported syntax', function fn() {
     const actual = markup(getFixtureFile('e2e.md'));
     const expected = getFixtureFile('e2e.result.txt');
-    assert.equal(actual, expected);
+    assert.strictEqual(actual, expected);
   });
 });
