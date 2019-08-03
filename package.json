@@ -29,32 +29,32 @@
   "license": "MIT",
   "dependencies": {
     "ansi-colors": "^4.1.1",
-    "ansi-escapes": "^4.2.0",
+    "ansi-escapes": "^4.2.1",
     "cli-highlight": "^2.1.1",
     "cli-table3": "^0.5.1",
     "compose-function": "^3.0.3",
     "fieldset": "github:horosgrisa/fieldset",
     "figures": "^3.0.0",
-    "languages-aliases": "^2.0.4",
+    "languages-aliases": "^2.0.5",
+    "marked": "^0.7.0",
     "node-emoji": "^1.10.0",
     "normalize-html-whitespace": "^1.0.0",
     "strip-ansi": "^5.2.0",
     "supports-hyperlinks": "^2.0.0",
-    "wrap-ansi": "^6.0.0",
-    "marked": "^0.7.0"
+    "wrap-ansi": "^6.0.0"
   },
   "directories": {
     "example": "example"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.6.8",
+    "@types/node": "^12.6.9",
     "eslint": "^6.1.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-standard-jsdoc": "^9.2.0",
     "eslint-plugin-async-await": "0.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsdoc": "^15.7.2",
+    "eslint-plugin-jsdoc": "^15.8.0",
     "eslint-plugin-mocha": "^6.0.0",
     "eslint-plugin-no-loops": "^0.3.0",
     "eslint-plugin-node": "^9.1.0",
