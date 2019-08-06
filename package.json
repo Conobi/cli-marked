@@ -4,16 +4,16 @@
   "description": "A custom render for marked to output to the Terminal",
   "main": "index.js",
   "bin": {
-    "md": "./cli.js"
+    "md": "./bin/md.js"
   },
   "scripts": {
     "test": "FORCE_HYPERLINK=0 mocha tests/*.js --reporter spec",
-    "fix": "eslint --quiet --fix *.js lib/*.js lib/*/*.js tests/*js .eslintrc.js --ignore-pattern '!.eslintrc.js'"
+    "fix": "eslint --quiet --fix *.js bin/*.js lib/*.js lib/*/*.js tests/*js .eslintrc.js --ignore-pattern '!.eslintrc.js'"
   },
   "files": [
     "index.js",
     "lib/",
-    "cli.js"
+    "bin/md.js"
   ],
   "keywords": [
     "marked",
@@ -33,6 +33,7 @@
     "cli-highlight": "^2.1.1",
     "cli-table3": "^0.5.1",
     "compose-function": "^3.0.3",
+    "concat-stream": "^2.0.0",
     "fieldset": "github:horosgrisa/fieldset",
     "figures": "^3.0.0",
     "languages-aliases": "^2.0.5",
