@@ -34,7 +34,7 @@
     "cli-table3": "^0.5.1",
     "compose-function": "^3.0.3",
     "concat-stream": "^2.0.0",
-    "fieldset": "github:horosgrisa/fieldset",
+    "boxen": "github:horosgrisa/boxen",
     "figures": "^3.0.0",
     "languages-aliases": "^2.0.5",
     "marked": "^0.7.0",
