@@ -31,6 +31,28 @@ This will produce the following:
 
 ![Screenshot of marked-terminal](./screenshot2.png)
 
+## Usage as module
+
+```sh
+npm i cli-marked
+```
+
+```js
+const marked = require('marked');
+const TerminalRenderer = require('cli-marked');
+
+marked.setOptions({
+  renderer: new TerminalRenderer({}),
+  mangle: false,
+  emoji: true,
+  breaks: false,
+  gfm: true,
+  smartypants: false,
+});
+
+console.log(markdown.toString());
+```
+
 ## Run tests
 
 ```sh
