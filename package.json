@@ -4,7 +4,8 @@
   "description": "A custom render for marked to output to the Terminal",
   "main": "index.js",
   "bin": {
-    "md": "./bin/md.js"
+	"md": "./bin/md.js",
+	"mkd":"./bin/md.js"
   },
   "scripts": {
     "test": "FORCE_HYPERLINK=0 mocha tests/*.js --reporter spec",
