@@ -50,7 +50,17 @@ marked.setOptions({
   smartypants: false,
 });
 
-console.log(markdown.toString());
+const markdown = `
+# Hello World
+
+---
+
+* One
+* Two
+* Three
+`
+
+console.log(marked(markdown));
 ```
 
 ## Run tests
