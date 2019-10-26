@@ -69,10 +69,10 @@ lines without indentation:
 
 And if you'd like to use syntax highlighting, include the language:
 
- ╭─ JavaScript ────────╮
- │                     │
- │   if (isAwesome){   │
- │     return true     │
- │   }                 │
- │                     │
- ╰─────────────────────╯
+ ╭─ JavaScript ─────────╮
+ │                      │
+ │   if (isAwesome){    │
+ │     return true      │
+ │   }                  │
+ │                      │
+ ╰──────────────────────╯
