@@ -4,8 +4,8 @@
   "description": "A custom render for marked to output to the Terminal",
   "main": "index.js",
   "bin": {
-	"md": "./bin/md.js",
-	"mkd":"./bin/md.js"
+    "md": "./bin/md.js",
+    "mkd": "./bin/md.js"
   },
   "scripts": {
     "test": "FORCE_HYPERLINK=0 mocha tests/*.js --reporter spec",
@@ -35,7 +35,7 @@
     "cli-table3": "^0.5.1",
     "compose-function": "^3.0.3",
     "concat-stream": "^2.0.0",
-    "boxen": "github:horosgrisa/boxen",
+    "boxen": "github:horosgrisa/fieldset",
     "figures": "^3.0.0",
     "languages-aliases": "^2.0.5",
     "marked": "^0.7.0",
@@ -59,12 +59,12 @@
     "eslint-plugin-jsdoc": "^15.9.1",
     "eslint-plugin-mocha": "^6.1.0",
     "eslint-plugin-no-loops": "^0.3.0",
-    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-simple-import-sort": "^4.0.0",
-    "eslint-plugin-unicorn": "^10.0.0",
+    "eslint-plugin-unicorn": "^12.1.0",
     "mocha": "^6.2.0"
   },
   "repository": {
