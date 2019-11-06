@@ -65,7 +65,7 @@ class Renderer extends marked.Renderer {
 
   html(html) {
     const transform = compose(
-      string => this.o.html(string),
+      (string) => this.o.html(string),
     );
 
     return transform(html);
@@ -116,7 +116,7 @@ class Renderer extends marked.Renderer {
 
   strong(text) {
     const transform = compose(
-      string => this.o.strong(string),
+      (string) => this.o.strong(string),
     );
 
     return transform(text);
@@ -124,7 +124,7 @@ class Renderer extends marked.Renderer {
 
   em(text) {
     const transform = compose(
-      string => this.o.em(string),
+      (string) => this.o.em(string),
     );
 
     return transform(text);
@@ -136,7 +136,7 @@ class Renderer extends marked.Renderer {
 
   del(text) {
     const transform = compose(
-      string => this.o.del(string),
+      (string) => this.o.del(string),
     );
 
     return transform(text);
