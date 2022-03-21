@@ -39,7 +39,7 @@
     "confusing-browser-globals": "^1.0.9",
     "figures": "^3.0.0",
     "languages-aliases": "^2.0.5",
-    "marked": "^0.7.0",
+    "marked": "github:UziTech/marked#async-parser",
     "node-emoji": "^1.10.0",
     "normalize-html-whitespace": "^1.0.0",
     "strip-ansi": "^5.2.0",
